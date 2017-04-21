@@ -1,0 +1,2563 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://www.di-mgt.com.au/rsa_alg.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<title>RSA Algorithm</title>
+<meta name="description" content="RSA Algorithm">
+<meta name="keywords" content="RSA, algorithm, public key encryption, digital signature">
+
+<meta name="copyright" content="Copyright (C) 2002-16 DI Management Services Pty Limited ABN 78 083 210 584 All Rights Reserved">
+<meta name="author" content="David Ireland, DI Management Services Pty Limited, Australia, www.di-mgt.com.au">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="./RSA Algorithm_files/normalize.min.css">
+<link href="./RSA Algorithm_files/di-print.css" rel="stylesheet" media="print">
+<link href="./RSA Algorithm_files/di-basic.css" rel="stylesheet" media="screen">
+<link href="./RSA Algorithm_files/di-fancy.css" rel="stylesheet" media="Screen and (min-width:768px)">
+<!--[if lt IE 9]><link href="di-fancy.css" rel="stylesheet" media="screen"><![endif]-->
+<!--[if lt IE 9]> <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script> <![endif]-->
+
+
+<link href="./RSA Algorithm_files/comment.css" rel="stylesheet" media="Screen"> 
+
+
+</head>
+<body>
+<!-- BEGIN HEADER-BLOCK -->
+<div class="t-header">
+	<div id="search" class="h-search">
+<form method="get" action="http://www.di-mgt.com.au/cgi-bin/ks/ksearch.cgi">
+	<div>
+<input type="text" name="terms" value="" size="8" class="input-box" data-cip-id="cIPJQ342845639">
+<input type="image" title="Search site" src="./RSA Algorithm_files/search16.png" alt="search">
+| <a href="http://www.di-mgt.com.au/sitemap.html" title="Sitemap for DI Management">Sitemap</a>
+<a href="http://www.di-mgt.com.au/index.html"><img id="homeicon" style="vertical-align: middle" width="32" height="32" src="./RSA Algorithm_files/home.png" alt="Home" title="Home Page"></a>
+	</div>
+</form>
+	</div>
+	<div id="crumbs" class="h-crumbs">
+<a href="http://www.di-mgt.com.au/index.html">DI&nbsp;Management Home</a> &gt;
+<a href="http://www.di-mgt.com.au/crypto.html">Cryptography</a> &gt;
+RSA Algorithm
+	</div>
+</div> 
+<!-- END HEADER-BLOCK -->
+
+<!-- BEGIN BODY-BLOCK -->
+<div class="w-body-text">
+<h1>
+	<img id="logo" class="h-logo" width="151" height="33" src="./RSA Algorithm_files/dilogo.gif" alt="DI Management Services is a computer programming consultancy based in Australia" title="DI Management Services, Australia">
+RSA Algorithm</h1>
+<hr class="noshow">
+
+<!-- Body Text begins -->
+<p>
+The RSA algorithm is named after Ron Rivest, Adi Shamir and Len Adleman, who invented it in 1977
+[<a href="http://www.di-mgt.com.au/rsa_alg.html#RIVE78">RIVE78</a>]. 
+The basic technique was first discovered in 1973 by 
+Clifford Cocks [<a href="http://www.di-mgt.com.au/rsa_alg.html#COCK73">COCK73</a>]
+of CESG (part of the British GCHQ) but this was a secret until 1997.
+The patent taken out by RSA Labs has expired.
+</p>
+
+<p>
+The RSA cryptosystem is the most widely-used public key cryptography algorithm in the world.
+It can be used to encrypt a message without the need to exchange a secret key separately.
+</p>
+
+<p>
+The RSA algorithm can be used for both public key encryption and digital signatures. 
+Its security is based on the difficulty of factoring large integers. 
+</p>
+
+<p>
+Party A can send an encrypted message to party B without any prior exchange of secret keys.
+A just uses B's public key to encrypt the message and B decrypts it using the private key, which only he knows.
+RSA can also be used to sign a message, 
+so A can sign a message using their private key and B can verify it using A's public key. 
+</p>
+
+<p>
+We look into the mathematics behind the algorithm on our <a href="http://www.di-mgt.com.au/rsa_theory.html">RSA Theory</a> page.
+</p>
+<p>
+
+<img src="./RSA Algorithm_files/new.gif" width="31" height="12" alt="New"><b>[2013-08-25]</b>
+Our pages on 
+<a href="http://www.di-mgt.com.au/public-key-crypto-discrete-logs-0.html">public key cryptography using discrete logarithms</a>
+look at a different kind of public key cryptography which relies on the difficulty of solving the discrete logarithm problem.
+</p>
+
+<h2><a id="contents"></a>Contents</h2>
+
+<!-- BEGIN BOOK STUFF -->
+<div class="book-outer" style="clear:both"><!-- begin book side block div -->
+<div class="book"><!-- begin inner block -->
+<h3>Recommended reading</h3>
+<ul>
+
+<li>
+<a href="http://www.amazon.com/dp/0470474246/?tag=diman0f6-20">Cryptography Engineering</a>
+by Niels Ferguson, Bruce Schneier and Tadayoshi Kohno.
+<a href="https://read.amazon.com/kp/embed?asin=B004NSW9JU&amp;preview=newtab&amp;linkCode=kpe&amp;ref_=cm_sw_r_kb_dp_gqb0wb1EX3XTF&amp;tag=diman0f6-20"><span class="bk1">Look</span> <span class="bk2">Inside</span></a>
+</li>
+
+<li>
+<a href="http://www.amazon.com/dp/0849385237/?tag=diman0f6-20">Handbook of Applied Cryptography</a>
+by Alfred J. Menezes, Paul C. van Oorschot and Scott A. Vanstone
+</li>
+
+<li>
+<a href="http://www.amazon.com/dp/1420075187/?tag=diman0f6-20">Cryptanalysis of RSA and Its Variants</a>
+by M. Jason Hinek
+</li>
+
+</ul>
+<p style="text-align:center">
+<a target="_blank" rel="nofollow" href="http://www.amazon.com/gp/student/signup/info/?ref_=assoc_tag_ph_1402130811706&amp;ie=UTF8&amp;camp=1789&amp;creative=9325&amp;linkCode=pf4&amp;tag=diman0f6-20&amp;linkId=Q3QZUTJYCMXFB6H3">Join Amazon Student  FREE Two-Day Shipping for College Students</a><img src="http://ir-na.amazon-adsystem.com/e/ir?t=diman0f6-20&amp;l=pf4&amp;o=1" width="1" height="1" alt="" style="border:none !important; margin:0px !important;">
+</p>
+<p class="disclosure">
+<a href="http://www.di-mgt.com.au/disclosure.html">Affiliate disclosure:</a> 
+we get a small commission for purchases made through the above links
+</p>
+</div><!-- end inner block -->
+</div><!-- end book side block div -->
+<!-- END BOOK STUFF -->
+
+<ul class="contents">
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#keygen">Key generation algorithm</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#practicalkeygen">A practical key generation algorithm</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#encryption">Encryption</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#decryption">Decryption</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#signing">Digital signing</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#verification">Signature verification</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#notespractical">Notes on practical application</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#rsasummary">Summary of RSA</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_theory.html">Theory and proof of the RSA algorithm</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#keylength">Key length</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#crt">Computational efficiency and the Chinese Remainder Theorem</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#simpleexample">A very simple example</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#lesssimpleexample">A slightly less simple example</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#realexample">A real example</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#pkcs1schemes">PKCS#1 Schemes</a>
+	<ul>
+		<li><a href="http://www.di-mgt.com.au/rsa_alg.html#encryptpkcs1">Encryption using PKCS#1v1.5</a></li>
+		<li><a href="http://www.di-mgt.com.au/rsa_alg.html#signpkcs1">Signing using PKCS#1v1.5</a></li>
+	</ul>
+</li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#weaknesses">Weaknesses in RSA</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#advanced">More Advanced Schemes</a>
+	<ul>
+		<li><a href="http://www.di-mgt.com.au/rsa_alg.html#oaep">RSAES-OAEP</a></li>
+		<li><a href="http://www.di-mgt.com.au/rsa_alg.html#pss">RSASSA-PSS</a></li>
+		<li><a href="http://www.di-mgt.com.au/rsa_alg.html#x931">ANSI X9.31 Signature Scheme</a></li>
+		<li><a href="http://www.di-mgt.com.au/rsa_alg.html#iso9796">ISO/IEC 9796</a></li>
+		<li><a href="http://www.di-mgt.com.au/rsa_alg.html#rsakem">RSA-KEM</a></li>
+		<li><a href="http://www.di-mgt.com.au/rsa_alg.html#ferg">Ferguson-Schneier Encryption</a></li>
+	</ul>
+</li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#notation">Notation and Conventions</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#stringvsinteger">What is the difference between a bit string and an integer?</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#implementation">Implementation in C and VB</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#references">References</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#theauthor">Author</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#feedback">Contact</a></li>
+<li><a href="http://www.di-mgt.com.au/rsa_alg.html#makeacomment">Comments</a></li>
+</ul>
+
+<h2><a id="keygen"></a>Key Generation Algorithm</h2>
+<p>This is the original algorithm.</p>
+<ol>
+<li>Generate two large random primes, <var>p</var> and <var>q</var>, of approximately equal size such that
+their product <span class="eqn">n = pq</span> is of the required bit length, e.g. 1024 bits. 
+[See <a href="http://www.di-mgt.com.au/rsa_alg.html#note1">note 1</a>].
+</li>
+<li>Compute <span class="eqn">n = pq</span> and <span class="eqn">(phi) φ = (p-1)(q-1)</span>.
+	[See <a href="http://www.di-mgt.com.au/rsa_alg.html#note6">note 6</a>].</li>
+<li>Choose an integer <var>e</var>, 
+<span class="eqn">1 &lt; e &lt; phi</span>, such that <span class="eqn">gcd(e, phi) = 1</span>. 
+[See <a href="http://www.di-mgt.com.au/rsa_alg.html#note2">note 2</a>].</li>
+<li>Compute the secret exponent <var>d</var>, <span class="eqn">1 &lt; d &lt; phi</span>, such that
+<span class="eqn">ed ≡ 1 (mod phi)</span>. [See <a href="http://www.di-mgt.com.au/rsa_alg.html#note3">note 3</a>].</li>
+<li>The public key is (n, e) and the private key (d, p, q). Keep all the values d, p, q and phi secret.
+[We prefer sometimes to write the private key as (n, d) because you need the value of n when using d.
+Other times we might write the key pair as ((N, e), d).]
+</li>
+</ol>
+<ul>
+<li>n is known as the <dfn>modulus</dfn>.</li>
+<li>e is known as the <dfn>public exponent</dfn> or <dfn>encryption exponent</dfn> or just the <dfn>exponent</dfn>.</li>
+<li>d is known as the <dfn>secret exponent</dfn> or <dfn>decryption exponent</dfn>.</li>
+</ul>
+
+<h2><a id="practicalkeygen"></a>A practical key generation algorithm</h2>
+<p>
+Incorporating the advice given in the <a href="http://www.di-mgt.com.au/rsa_alg.html#notespractical">notes below</a>, 
+a practical algorithm to generate an RSA key pair is given below.
+Typical bit lengths are <span class="eqn">k = 1024, 2048, 3072, 4096,...</span>, with increasing computational expense for larger values.
+You will not go far wrong if you choose <var>e</var> as 65537 (=0x10001) in step (1).
+</p>
+<hr>
+<b>Algorithm:</b> Generate an RSA key pair.
+<hr>
+INPUT: Required modulus bit length, <var>k</var>. 
+<br>
+OUTPUT: An RSA key pair ((N,e), d) where N is the modulus, the product of two primes (N=pq) not exceeding <var>k</var> bits in length; 
+e is the public exponent, a number less than and coprime to (p-1)(q-1); 
+and d is the private exponent such that <span class="eqn">ed ≡ 1 (mod (p-1)(q-1))</span>.
+<br>
+<ol>
+<li>Select a value of <var>e</var> from <span class="eqn">{3, 5, 17, 257, 65537}</span></li>
+<li><b>repeat</b></li>
+<li>&nbsp;&nbsp;&nbsp;p ← genprime(k/2)</li>
+<li><b>until</b> (p mod e) ≠ 1
+</li><li><b>repeat</b></li>
+<li>&nbsp;&nbsp;&nbsp;q ← genprime(k - k/2)</li>
+<li><b>until</b> (q mod e) ≠ 1
+</li><li>N ← pq</li>
+<li>L ← (p-1)(q-1)</li>
+<li>d ← modinv(e, L)</li>
+<li><b>return</b> <var>(N, e, d)</var></li>
+</ol>
+<hr>
+<p>
+The function <code>genprime(b)</code> returns a prime of exactly <var>b</var> bits, with the <var>b</var>th bit set to 1.
+Note that the operation k/2 is <em>integer</em> division giving the integer quotient with no fraction.
+</p>
+<p>
+If you've chosen e = 65537 then the chances are that the first prime returned in steps (3) and (6) will pass the tests in steps (4) and (7), 
+so each repeat-until loop will most likely just take one iteration. 
+The final value of N may have a bit length slightly short of the target <var>k</var>. 
+This actually does not matter too much (providing the message m is always &lt; N), 
+but some schemes require a modulus of exact length.
+If this is the case, then just repeat the entire algorithm until you get one.
+It should not take too many goes. 
+Alternatively, use the trick setting the two highest bits in the prime candidates described in <a href="http://www.di-mgt.com.au/rsa_alg.html#note1">note 1</a>.
+</p>
+
+<h2><a id="encryption"></a>Encryption</h2>
+<p>
+Sender A does the following:-
+</p>
+<ol>
+<li>Obtains the recipient B's public key (n, e).</li>
+<li>Represents the plaintext message as a positive integer <var>m</var>, <span class="eqn">1 &lt; m &lt; n</span> 
+	[see <a href="http://www.di-mgt.com.au/rsa_alg.html#note4">note 4</a>]. </li>
+<li>Computes the ciphertext <span class="eqn">c = m<sup>e</sup> mod n</span>.</li>
+<li>Sends the ciphertext <var>c</var> to B.</li>
+</ol>
+
+<h2><a id="decryption"></a>Decryption</h2>
+<p>
+Recipient B does the following:-
+</p>
+<ol>
+<li>Uses his private key (n, d) to compute <span class="eqn">m = c<sup>d</sup> mod n</span>.</li>
+<li>Extracts the plaintext from the message representative <var>m</var>.</li>
+</ol>
+
+<h2><a id="signing"></a>Digital signing</h2>
+<p>
+Sender A does the following:-
+</p>
+<ol>
+<li>Creates a <dfn>message digest</dfn> of the information to be sent.</li>
+<li>Represents this digest as an integer <var>m</var> between 1 and <var>n</var>-1. [See <a href="http://www.di-mgt.com.au/rsa_alg.html#note5">note 5</a>].</li>
+<li>Uses her <em>private</em> key (n, d) to compute the signature <span class="eqn">s = m<sup>d</sup> mod n</span>.</li>
+<li>Sends this signature <var>s</var> to the recipient, B.</li>
+</ol>
+
+<h2><a id="verification"></a>Signature verification</h2>
+<p>
+Recipient B does the following:-
+</p>
+<ol>
+<li>Uses sender A's public key (n, e) to compute integer <span class="eqn">v = s<sup>e</sup> mod n</span>.</li>
+<li>Extracts the message digest from this integer.</li>
+<li>Independently computes the message digest of the information that has been signed.</li>
+<li>If both message digests are identical, the signature is valid.</li>
+</ol>
+
+
+
+<h2><a id="notespractical"></a>Notes on practical applications</h2>
+<ol>
+<li class="vs"><a id="note1"></a>To generate the primes <var>p</var> and <var>q</var>, 
+generate a random number of bit length k/2 where
+<var>k</var> is the required bit length of the modulus <var>n</var>; set the low bit (this ensures the number is odd) 
+and set the <em>two</em> highest bits (this ensures that the high bit of <var>n</var> is also set); 
+check if prime (use the <dfn>Rabin-Miller</dfn> test); 
+if not, increment the number
+by two and check again until you find a prime. This is <var>p</var>. 
+Repeat for <var>q</var> starting with a random integer of length k-k/2.
+If p&lt;q, swop <var>p</var> and <var>q</var> (this only matters if you intend using the CRT form of the private key).
+In the extremely unlikely event that p = q, check your random number generator. 
+Alternatively, instead of incrementing by 2, just generate another random number each time.
+<p>
+There are stricter rules in <a href="http://www.di-mgt.com.au/rsa_alg.html#x931">ANSI X9.31</a> to produce <dfn>strong primes</dfn>
+and other restrictions on <var>p</var> and <var>q</var> to minimise the possibility of known techniques being
+used against the algorithm. There is much argument about this topic. It is probably better just to use a longer key length.
+</p>
+</li>
+
+<li class="vs"><a id="note2"></a>In practice, common choices for <var>e</var> are 3, 5, 17, 257 and 65537 (2<sup>16</sup>+1). 
+These particular values are chosen because they are primes and make the modular exponentiation operation faster, having only two bits of value 1.
+
+<div class="smaller" style="margin-left:2em;margin-top:0.5em;margin-bottom:0.5em;">
+<em>Aside:</em> These five numbers are the first five <dfn>Fermat numbers</dfn>, referred to as F<sub>0</sub> to F<sub>4</sub>, 
+where
+<img src="./RSA Algorithm_files/fermat.gif" width="114" height="23" alt="Fx=2^(2^x)+1">.
+Just be careful, these first five Fermat numbers are prime ("Fermat primes"), but the numbers F<sub>5</sub> and above are not prime.
+For example, F<sub>5</sub> = 4294967297 = 641 × 6700417.
+</div>
+The usual choice for <var>e</var> is F4 = 65537 = 0x10001. 
+Also, having chosen <var>e</var>, it is simpler to test whether gcd(e, p-1)=1 and gcd(e, q-1)=1 while generating
+and testing the primes in step 1. 
+Values of <var>p</var> or <var>q</var> that fail this test can be rejected there and then.
+<div style="margin-top:1em">
+Even better: if <var>e</var> is an odd prime then you can do the less-expensive test 
+<span class="eqn">(p mod e) ≠ 1</span> instead of <span class="eqn">gcd(p-1,e) = 1</span>.
+
+<div class="smaller" style="margin-left:2em;margin-top:0.5em;">
+<em>Why is that?</em> If e is prime then gcd(p-1, e) &gt; 1 if and only if p-1 is a multiple of e.
+That is, if <span class="eqn">p - 1 ≡ 0 (mod e)</span> or <span class="eqn">p ≡ 1 (mod e)</span>. 
+Hence gcd(p-1, e) = 1 ⇔ p mod e ≠ 1.
+</div>
+</div>
+</li>
+
+<li class="vs"><a id="note3"></a>To compute the value for <var>d</var>, 
+	use the <dfn>Extended Euclidean Algorithm</dfn> to calculate
+<span class="eqn">d = e<sup>-1</sup> mod phi</span>, also written <span class="eqn">d = (1/e) mod phi</span>. 
+This is known as <dfn>modular inversion</dfn>. Note that this is not integer division. 
+The modular inverse <var>d</var> is defined as the integer value such that <span class="eqn">ed = 1 mod phi</span>. 
+It only exists if <var>e</var> and <var>phi</var> have no common factors.
+
+	<div style="margin: 10px; padding: 10px; border: 1px #c00 dashed;margin-right: 200px;">
+		<img src="./RSA Algorithm_files/new.gif" width="31" height="12" alt="New"><b>2010-08-14:</b> 
+		For more details of the extended Euclidean algorithm, see our new page
+		<a href="http://www.di-mgt.com.au/euclidean.html">The Euclidean Algorithm and the Extended Euclidean Algorithm</a>
+		which shows how to use the Euclidean algorithm, answer exam questions on it, and gives source code for an implementation.
+	</div>
+
+</li>
+
+<li class="vs"><a id="note4"></a>When representing the plaintext octets as the representative integer <var>m</var>, 
+it is important to add random padding characters
+to make the size of the integer <var>m</var> large and less susceptible to certain types of attack. 
+If m = 0 or 1 or n-1 there is no security as the ciphertext has the same value.
+For more details on how to represent the plaintext octets as a suitable representative integer <var>m</var>, 
+see <a href="http://www.di-mgt.com.au/rsa_alg.html#pkcs1schemes">PKCS#1 Schemes</a> below or the reference itself [<a href="http://www.di-mgt.com.au/rsa_alg.html#PKCS1">PKCS1</a>]. 
+It is important to make sure that m &lt; n 
+otherwise the algorithm will fail. This is usually done by making sure the first octet of m is equal to 0x00.
+</li>
+
+<li class="vs"><a id="note5"></a>Decryption and signing are identical as far as the mathematics is concerned as both use the private key. 
+Similarly, encryption and verification both use the same mathematical operation with the public key.
+That is, mathematically, for <span class="eqn">m &lt; n</span>,
+<p class="code">m = (m<sup>e</sup> mod n)<sup>d</sup> mod n = (m<sup>d</sup> mod n)<sup>e</sup> mod n</p>
+
+<p>However, note these important differences in implementation:-</p>
+	<ul>
+	<li class="vs">The signature is derived from a message digest of the original information. 
+	The recipient will need to follow exactly the same process to derive the
+	message digest, using an identical set of data.
+	</li>
+	<li class="vs">The recommended methods for deriving the representative integers are different
+	for encryption and signing (encryption involves random padding, but signing uses the same padding each time).
+	</li>
+	</ul>
+</li>
+
+<li class="vs"><a id="note6"></a>The original definition of RSA uses the Euler totient function
+φ(n) = (p-1)(q-1). More recent standards use the <dfn>Charmichael function</dfn> λ(n) = lcm(p-1, q-1) instead.
+λ(n) is smaller than φ(n) and divides it. The value of d' computed by d' = e<sup>-1</sup> mod λ(n)
+is usually different from that derived by d = e<sup>-1</sup> mod φ(n), but the end result is the same.
+Both d and d' will decrypt a message m<sup>e</sup> mod n and both will give the same signature value 
+s = m<sup>d</sup> mod n = m<sup>d'</sup> mod n. To compute λ(n), use the relation
+<pre class="code">    λ(n) = (p-1)(q-1) / gcd(p-1, q-1).
+</pre>
+
+</li><li class="vs"><a id="note7"></a>
+You might ask if there is a way to find the factors of <var>n</var> given just <var>d</var> and <var>e</var>. 
+This is possible.
+
+	<div style="margin: 10px; padding: 10px; border: 1px #c00 dashed;margin-right: 200px;">
+		<img src="./RSA Algorithm_files/new.gif" width="31" height="12" alt="New"><b>2012-12-01:</b> 
+		For more details, see our page
+		<a href="http://www.di-mgt.com.au/rsa_factorize_n.html">RSA: how to factorize N given d</a>.
+	</div>
+
+</li>
+
+</ol>
+
+<h2><a id="rsasummary"></a>Summary of RSA</h2>
+<div class="data" style="width: 50%;">
+<ul class="eqn">
+<li>n = pq, where p and q are distinct primes.</li>
+<li>phi, φ = (p-1)(q-1)</li>
+<li>e &lt; n such that gcd(e, phi)=1</li>
+<li>d = e<sup>-1</sup> mod phi.</li>
+<li>c = m<sup>e</sup> mod n, 1&lt;m&lt;n.</li>
+<li>m = c<sup>d</sup> mod n.</li>
+</ul>
+</div>
+
+<p>
+For more on the theory and mathematics behind the algorithm, see the <a href="http://www.di-mgt.com.au/rsa_theory.html">RSA Theory</a> page.
+</p>
+
+<h2><a id="keylength"></a>Key length</h2>
+
+<p>
+When we talk about the <dfn>key length</dfn> of an RSA key, we are referring to the length of the modulus, <var>n</var>, in bits.
+The minimum recommended key length for a secure RSA transmission is currently 1024 bits. 
+A key length of 512 bits is now no longer considered secure, 
+although cracking it is still not a trivial task for the likes of you and me. 
+The longer your information is needed to be kept secure, the longer the key you should use.
+Keep up to date with the latest recommendations in the security journals.
+</p>
+
+<p>
+There is one small area of confusion in defining the key length.
+One convention is that the key length is the position of the most significant bit in <var>n</var> that has value '1', 
+where the least significant bit is at position 1. Equivalently, key length = <span class="eqn">ceiling(log<sub>2</sub>(n+1))</span>.
+The other convention, sometimes used, is that the key length is the number of bytes needed to store <var>n</var> multiplied by eight, 
+i.e. <span class="eqn">ceiling(log<sub>256</sub>(n+1))*8</span>.
+</p>
+The key used in the RSA Example paper [<a href="http://www.di-mgt.com.au/rsa_alg.html#KALI93">KALI93</a>] is an example. In hex form the modulus is
+<pre>0A 66 79 1D C6 98 81 68 DE 7A B7 74 19 BB 7F B0
+C0 01 C6 27 10 27 00 75 14 29 42 E1 9A 8D 8C 51
+D0 53 B3 E3 78 2A 1D E5 DC 5A F4 EB E9 94 68 17
+01 14 A1 DF E6 7C DC 9A 9A F5 5D 65 56 20 BB AB
+</pre>
+<p>
+The most significant byte 0x0A in binary is <code>00001010'B</code>. 
+The most significant bit is at position 508, so its key length is 508 bits.
+On the other hand, this value needs 64 bytes to store it, so the key length could also be referred to by some as 64 x 8 = 512 bits.
+We prefer the former method. You can get into difficulties with the X9.31 method for signatures if you use the latter convention.
+</p>
+
+<h3>Minimum key lengths</h3>
+<p>
+The following table is taken from NIST's Recommendation for Key Management [<a href="http://www.di-mgt.com.au/rsa_alg.html#NIST-80057">NIST-80057</a>].
+It shows the recommended comparable key sizes for symmetrical block ciphers (AES and Triple DES) and the RSA algorithm. 
+That is, the key length you would need to use to have comparable security. 
+</p>
+
+<table class="ditable" style="text-align:center">
+<tbody><tr><th>Symmetric key algorithm</th><th>Comparable RSA key length</th><th>Comparable hash function</th><th>Bits of security</th></tr>
+<tr><td>2TDEA*</td><td>1024</td><td>SHA-1</td><td>80</td></tr>	
+<tr><td>3TDEA</td><td>2048</td><td>SHA-224</td><td>112</td></tr>	
+<tr><td>AES-128</td><td>3072</td><td>SHA-256</td><td>128</td></tr>	
+<tr><td>AES-192</td><td>7680</td><td>SHA-384</td><td>192</td></tr>	
+<tr><td>AES-256</td><td>15360</td><td>SHA-512</td><td>256</td></tr>	
+</tbody></table>
+<div class="smaller">* 2TDEA is 2-key triple DES - see <a href="http://www.cryptosys.net/3des.html">What's two-key triple DES encryption</a>.
+</div>
+<p>
+Note just how huge (and impractical) an RSA key needs to be for comparable security with AES-192 or AES-256 
+(although these two algorithms have had some 
+<a href="http://www.schneier.com/blog/archives/2009/07/another_new_aes.html">weaknesses</a> exposed recently; AES-128 is unaffected).
+</p>
+<p>
+The above table is a few years old now and may be out of date. Existing cryptographic algorithms only get weaker as attacks get better.
+</p>
+
+<h2><a id="crt"></a>Computational Efficiency and the Chinese Remainder Theorem (CRT)</h2>
+<p>
+Key generation is only carried out occasionally and so computational efficiency is less of an issue. 
+</p>
+<p>
+The calculation a = b<sup>e</sup> mod n is known as <dfn>modular
+exponentiation</dfn> and one efficient method to carry this out on a computer
+is the <dfn>binary left-to-right method</dfn>. 
+To solve <b>y = x^e mod n</b> let e be represented in base 2 as
+</p>
+<p>
+e = e<sub>(k-1)</sub>e<sub>(k-2)</sub>...e<sub>(1)</sub>e<sub>(0)</sub>
+</p>
+
+<p>where e(k-1) is the most significant non-zero bit and bit e(0) the least.</p>
+<pre>set y = x
+for bit j = k - 2 downto 0 
+begin
+  y = y * y mod n   /* square */
+  if e(j) == 1 then
+    y = y * x mod n  /* multiply */
+end
+return y
+</pre>
+
+<p>
+The time to carry out 
+modular exponentation increases with the number of bits set to one in the exponent <var>e</var>. 
+For encryption, an appropriate choice of <var>e</var> can reduce the computational effort required 
+to carry out the computation of <span class="eqn">c = m<sup>e</sup> mod n</span>. Popular
+choices like 3, 17 and 65537 are all primes with only two bits set:
+3 = 0011'B, 17 = 0x11, 65537 = 0x10001.
+</p>
+
+<p>The bits in the decryption exponent <var>d</var>, however, will not be so convenient and so decryption 
+using the standard method of modular exponentiation will take longer than encryption. 
+Don't make the mistake of trying to contrive a small value for <var>d</var>; it is not secure.
+</p>
+
+<p>
+An alternative method of representing the private key uses the 
+<a href="http://www.di-mgt.com.au/crt.html">The Chinese Remainder Theorem</a> (CRT).
+</p>
+<div class="breakout">
+<img src="./RSA Algorithm_files/new.gif" width="31" height="12" alt="New">
+<b>2011-01-20:</b> For an explanation of how the CRT is used with RSA, see 
+<a href="http://www.di-mgt.com.au/crt_rsa.html">Using the CRT with RSA</a>.
+</div>
+<p>
+The private key is represented as a quintuple (p, q, dP, dQ, and qInv), where p and q are
+prime factors of n, dP and dQ are known as the <dfn>CRT exponents</dfn>,
+and qInv is the <dfn>CRT coefficient</dfn>. The CRT method of decryption is about four times
+faster overall than calculating m = c<sup>d</sup> mod n. 
+The extra values for the private key are:-
+</p>
+<pre>dP = (1/e) mod (p-1)
+dQ = (1/e) mod (q-1)
+qInv = (1/q) mod p  where p &gt; q
+</pre>
+<p>
+where the <code>(1/e)</code> notation means the <dfn>modular inverse</dfn> (see <a href="http://www.di-mgt.com.au/rsa_alg.html#note3">note 3</a> above). 
+These values are pre-computed and saved along with <var>p</var> and <var>q</var> as the private key.
+
+To compute the message m given c do the following:-
+</p>
+<pre>m1 = c^dP mod p
+m2 = c^dQ mod q
+h = qInv(m1 - m2) mod p
+m = m2 + hq
+</pre>
+<p>
+Even though there are more steps in this procedure, the modular exponentation to be carried out uses much
+shorter exponents and so it is less expensive overall.
+</p>
+
+<p><b>[2008-09-02]</b> Chris Becke has pointed out that most large integer packages will fail when computing <code>h</code> if <code>m1 &lt; m2</code>.
+This can be easily fixed by computing 
+</p>
+<pre>h = qInv(m1 + p - m2) mod p</pre> 
+<p>
+or, alternatively, as we do it in our BigDigits
+implementation of RSA,
+</p>
+<pre class="code"> if (bdCompare(m1, m2) &lt; 0)
+    bdAdd(m1, m1, p);
+ bdSubtract(m1, m1, m2);
+ <span class="comment">/* Let h = qInv ( m_1 - m_2 ) mod p. */</span>
+ bdModMult(h, qInv, m1, p);
+</pre>
+
+
+<h2><a id="simpleexample"></a>A very simple example of RSA encryption</h2>
+<p>
+This is an extremely simple example using numbers you can work out on a pocket calculator
+(those of you over the age of <span class="withdrawn">35</span> 45 can probably even do it by hand).
+</p>
+<ol>
+<li>Select primes p=11, q=3.</li>
+<li>n = pq = 11.3 = 33<br>
+phi = (p-1)(q-1) = 10.2 = 20
+</li>
+<li>Choose e=3<br>
+Check gcd(e, p-1) = gcd(3, 10) = 1 (i.e. 3 and 10 have no common factors except 1),<br>
+and check gcd(e, q-1) = gcd(3, 2) = 1<br>
+therefore gcd(e, phi) = gcd(e, (p-1)(q-1)) = gcd(3, 20) = 1
+</li>
+<li>Compute d such that ed ≡ 1 (mod phi)<br>
+i.e. compute d = e<sup>-1</sup> mod phi = 3<sup>-1</sup> mod 20<br>
+i.e. find a value for d such that phi divides (ed-1)<br>
+i.e. find d such that 20 divides 3d-1.<br>
+Simple testing (d = 1, 2, ...) gives d = 7<br>
+Check: ed-1 = 3.7 - 1 = 20, which is divisible by phi.
+</li>
+<li>Public key = (n, e) = (33, 3)<br>
+Private key = (n, d) = (33, 7).
+</li>
+</ol>
+This is actually the smallest possible value for the modulus n for which the RSA
+algorithm works.
+<p>
+Now say we want to encrypt the message m = 7,<br>
+c = m<sup>e</sup> mod n = 7<sup>3</sup> mod 33 = 343 mod 33 = 13.<br>
+Hence the ciphertext c = 13.
+</p>
+<p>
+To check decryption we compute<br>
+m' = c<sup>d</sup> mod n = 13<sup>7</sup> mod 33 = 7.
+<br>
+Note that we don't have to calculate the full value of 13 to the power 7 here. 
+We can make use of the fact that<br>
+a = bc mod n = (b mod n).(c mod n) mod n
+<br>
+so we can break down a potentially large number into its components and combine the results of 
+easier, smaller calculations to calculate the final value.
+</p>
+<p>
+One way of calculating m' is as follows:-<br>
+Note that any number can be expressed as a sum of powers of 2. 
+So first compute values of 13<sup>2</sup>, 13<sup>4</sup>, 13<sup>8</sup>, ... by repeatedly squaring
+ successive values modulo 33. <br>
+13<sup>2</sup> = 169 ≡ 4, 13<sup>4</sup> = 4.4 = 16, 13<sup>8</sup> = 16.16 = 256 ≡ 25. <br>
+Then, since 7 = 4 + 2 + 1, we have
+m' = 13<sup>7</sup> = 13<sup>(4+2+1)</sup> = 13<sup>4</sup>.13<sup>2</sup>.13<sup>1</sup><br>
+≡ 16 x 4 x 13 = 832 ≡ 7 mod 33<br>
+</p>
+<p>
+Now if we calculate the ciphertext c for all the possible values of m (0 to 32), we get
+</p>
+<pre><b>m</b>  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
+<b>c</b>  0  1  8 27 31 26 18 13 17  3 10 11 12 19  5  9  4
+
+<b>m</b> 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+<b>c</b> 29 24 28 14 21 22 23 30 16 20 15  7  2  6 25 32
+</pre>
+<p>Note that all 33 values of m (0 to 32) map to a unique code c in the same range in
+a sort of random manner. In this case we have nine values of m that map to the same value of c
+- these are known as <dfn>unconcealed messages</dfn>. m = 0, 1 and n-1 will always do this for any <var>n</var>, 
+no matter how large. But in practice, these shouldn't be a problem when we use large
+values for <var>n</var> in the order of several hundred bits.
+</p>
+
+<p>If we wanted to use this system to keep secrets, we could let A=2, B=3, ..., Z=27.
+(We specifically avoid 0 and 1 here for the reason given above).
+Thus the plaintext message "HELLOWORLD" would be represented by the set of integers 
+m<sub>1</sub>, m<sub>2</sub>, ...
+</p>
+<pre>(9,6,13,13,16,24,16,19,13,5)
+</pre>
+Using our table above, we obtain ciphertext integers 
+c<sub>1</sub>, c<sub>2</sub>, ...
+<pre>(3,18,19,19,4,30,4,28,19,26)
+</pre>
+Note that this example is no more secure than using a simple Caesar substitution cipher, but it serves
+to illustrate a simple example of the mechanics of RSA encryption.
+<p>
+Remember that calculating m<sup>e</sup> mod n is easy, but calculating the inverse
+c<sup>-e</sup> mod n is very difficult, well, for large n's anyway. 
+However, if we can factor n into its 
+prime factors p and q, the solution becomes easy again, even for large n's. 
+Obviously, if we can get hold of the secret exponent d, the solution is easy, too.
+</p>
+
+<h2><a id="lesssimpleexample"></a>A slightly less simple example of the RSA algorithm</h2>
+
+<p>
+<b>[Updated 25 November 2012]</b> This time, to make life slightly less easy for those who can crack simple Caesar substitution codes, 
+we will group the characters into blocks of three and compute a message representative integer for each block.
+<em>Please note that this method is not secure in any way</em>. It just shows another example of the mechanism of RSA with small numbers.
+</p>
+
+<p>
+For this example, to keep things simple, we'll limit our characters to the letters A to Z and the space character.
+</p>
+<pre>ATTACK AT SEVEN = ATT ACK _AT _SE VEN
+</pre>
+
+<p>
+In the same way that any decimal number can be represented uniquely as the sum of powers of ten, e.g.<br>
+135 = 1 x 10<sup>2</sup> + 3 x 10<sup>1</sup> + 5,<br>
+we can represent our blocks of three characters as the sum of powers of 27 using 
+SPACE=0, A=1, B=2, C=3, .. E=5, .. K=11, .. N=14, .. S=19, T=20, .. V=22, ..., Z=26.
+</p>
+
+<p style="font-family: &#39;Courier New&#39;, Courier, monospace;">
+ATT ⇒  1 x 27<sup>2</sup> + 20 x 27<sup>1</sup> + 20 = 1289   <br>
+ACK ⇒  1 x 27<sup>2</sup> +  3 x 27<sup>1</sup> + 11 = 821    <br>
+_AT ⇒  0 x 27<sup>2</sup> +  1 x 27<sup>1</sup> + 20 = 47     <br>
+_SE ⇒  0 x 27<sup>2</sup> + 19 x 27<sup>1</sup> +  5 = 518    <br>
+VEN ⇒ 22 x 27<sup>2</sup> +  5 x 27<sup>1</sup> + 14 = 16187  <br>
+</p>
+
+<p>
+Using this system of integer representation, the maximum value of a block (ZZZ) is 27<sup>3</sup>-1 = 19682, so we require
+a modulus n greater than this value.
+</p>
+<ol>
+<li>We choose e = 3</li>
+<li>We select primes p=173 and q=149 and check 
+<ul>
+	<li>gcd(e, p-1) = gcd(3, 172) = 1 ⇒ OK</li>
+	<li>gcd(e, q-1) = gcd(3, 148) = 1 ⇒ OK.</li>
+</ul>
+</li>
+<li>Thus we have n = pq = 173 × 149 = 25777, and<br>
+phi = (p-1)(q-1) = 172 × 148 = 25456.
+</li>
+<li>We compute d = e<sup>-1</sup> mod phi = 3<sup>-1</sup> mod 25456 = 16971.
+	<ul>
+	<li>Note that ed = 3 × 16971 = 50913 = 2 × 25456 + 1</li>
+	<li>That is, ed ≡ 1 mod 25456 ≡ 1 mod phi</li>
+	</ul>
+</li>
+<li>Hence our public key is (n, e) = (25777, 3) and our private key is (n, d) = (25777, 16971).
+	We keep the values of p, q, d and phi secret.
+</li>
+</ol>
+
+
+<p>
+To encrypt the first integer that represents "ATT", we have<br>
+c = m<sup>e</sup> mod n = 1289<sup>3</sup> mod 25777 = 18524.<br>
+</p>
+
+<p>
+Overall, our plaintext <code class="code">ATTACK AT SEVEN</code> is represented by the sequence of five integers 
+m<sub>1</sub>, m<sub>2</sub>, m<sub>3</sub>, m<sub>4</sub>, m<sub>5</sub>:
+</p>
+<pre>m_i = (1289, 821, 47, 518, 16187)
+</pre>
+<p>
+We compute corresponding ciphertext integers c<sub>i</sub> = m<sub>i</sub><sup>e</sup> mod n, 
+(which is still possible by using a calculator, honest):
+</p>
+<p style="font-family: &#39;Courier New&#39;, Courier, monospace;">
+c<sub>1</sub> =  1289<sup>3</sup> mod 25777 = 18524   <br>
+c<sub>2</sub> =   821<sup>3</sup> mod 25777 = 7025   <br>
+c<sub>3</sub> =    47<sup>3</sup> mod 25777 = 715   <br>
+c<sub>4</sub> =   518<sup>3</sup> mod 25777 = 2248   <br>
+c<sub>5</sub> = 16187<sup>3</sup> mod 25777 = 24465   <br>
+</p>
+
+<p>
+We can send this sequence of integers, c<sub>i</sub>, to the person who has the private key.
+</p>
+<pre>c_i = (18524, 7025, 715, 2248, 24465)
+</pre>
+
+
+<p>
+We can compute the inverse of these ciphertext integers using
+m = c<sup>d</sup> mod n to verify that the RSA algorithm still holds. However, this is now
+outside the realm of hand calculations.
+</p>
+
+<p>
+To help you carry out these modular arithmetic calculations, download our
+<a href="http://www.di-mgt.com.au/modarith.html">free modular arithmetic</a> command line programs.
+</p>
+
+<p>
+For example, to compute <code class="output">18524<sup>16971</sup> mod 25777</code>, use the <code>bd_modexp</code> command:
+</p>
+
+<pre class="code">bd_modexp 18524 16971 25777
+18524^16971 mod 25777 = 1289
+</pre>
+
+<div>You should get the results:
+<p style="font-family: &#39;Courier New&#39;, Courier, monospace;">
+m<sub>1</sub> = 18524<sup>16971</sup> mod 25777 = 1289  <br>
+m<sub>2</sub> =  7025<sup>16971</sup> mod 25777 = 821  <br>
+m<sub>3</sub> =   715<sup>16971</sup> mod 25777 = 47   <br>
+m<sub>4</sub> =  2248<sup>16971</sup> mod 25777 = 518   <br>
+m<sub>5</sub> = 24465<sup>16971</sup> mod 25777 = 16187   <br>
+</p>
+</div>
+
+<div>
+To convert these integers back to the block of three letters, do the following. For example, given m = 16187,
+
+<p style="font-family: &#39;Courier New&#39;, Courier, monospace;">
+16187 ÷ 27<sup>2</sup> = 16187 ÷ 729 = 22 rem 149, 22 → 'V' <br>
+149 ÷ 27<sup>1</sup> = 149 ÷ 27 = 5 rem 14, 5 → 'E' <br>
+14 ÷ 27<sup>0</sup> = 14 ÷ 1 = 14 rem 0, 14 → 'N' <br>
+</p>
+Hence the integer m = 16187 represents the string "VEN".
+</div>
+<p>
+Similarly, m = 47 is encoded as follows: 
+<code>
+47 ÷ 27<sup>2</sup> = 0 rem 47, 0 → SPACE; 
+47 ÷ 27<sup>1</sup> = 1 rem 20, 1 → 'A';
+20 ÷ 27<sup>0</sup> = 20 rem 0, 20 → 'T'
+</code>
+giving the string "_AT".
+</p>
+
+<p><i><b>Question:</b> Why can't we use this method of encoding integers into blocks of three letters to encode the ciphertext?</i>
+</p>
+
+<h3>A caution about this example</h3>
+
+<p>
+Note that this example is a very insecure method of encryption and should not be used in practice.
+We can easily factorize the modulus and hence break the cipher.
+</p>
+
+<h3>Factorising a small RSA modulus</h3>
+<p>
+Starting with the knowledge that the modulus 25777 is the product of exactly two distinct prime
+numbers, and that one of these must be less than its integer square root (why?), a little testing of suitable candidates
+from a <a href="http://www.di-mgt.com.au/primes1000.html">table of prime numbers</a> will get you the answer pretty quickly. 
+</p>
+<p class="smaller">
+Given n = 25777, compute √25777 = 160.55, and then work downwards through the prime numbers &lt; 160, i.e. (157, 151, 149, 139, ...),
+and try to divide into <var>n</var> in turn: <br>
+&nbsp; 157: 25777 / 157 = 164 remainder 29, so not a factor;  <br>
+&nbsp; 151: 25777 / 151 = 170 remainder 107, so not a factor; <br>
+&nbsp; 149: 25777 / 149 = 173 exactly, so we have it. 
+</p>
+
+<p>
+You could also write a simple computer program to factor n that just divides it by
+every odd number starting from 3 until it either finds an exact factor or stops when it reaches a number greater than the square
+root of n.
+</p>
+
+
+<h2><a id="realexample"></a>A real example</h2>
+
+<p>
+In practice, we use a modulus of size in the order of 1024 bits. That is a number over 300 decimal digits long.
+One example is
+</p><pre>n = 
+11929413484016950905552721133125564964460656966152763801206748195494305685115033
+38063159570377156202973050001186287708466899691128922122454571180605749959895170
+80042105263427376322274266393116193517839570773505632231596681121927337473973220
+312512599061231322250945506260066557538238517575390621262940383913963
+</pre>
+<p>
+This is composed of the two primes
+</p>
+
+<pre>p = 
+10933766183632575817611517034730668287155799984632223454138745671121273456287670
+008290843302875521274970245314593222946129064538358581018615539828479146469
+
+q = 
+10910616967349110231723734078614922645337060882141748968209834225138976011179993
+394299810159736904468554021708289824396553412180514827996444845438176099727
+</pre>
+
+
+<p>
+With a number this large, we can encode all the information we need in one big integer.
+We put our message into an octet string and then convert to a large integer.
+</p>
+
+<p>
+Also, rather than trying to represent the plaintext as an integer directly,  
+we generate a random <dfn>session key</dfn> and use that to encrypt the plaintext with
+a conventional, much faster symmetrical algorithm like Triple DES or AES-128. 
+We then use the much slower public key encryption algorithm to encrypt just the session key.
+</p>
+
+
+<p>
+The sender A then transmits a message to the recipient B in a format something like this:-
+</p>
+
+<p class="code" style="width: 50%; padding: 20px; background-color: #ccffff; border: medium double red;">
+Session key encrypted with RSA = xxxx<br>
+Plaintext encrypted with session key = xxxxxxxxxxxxxxxxx<br>
+</p>
+
+<p>
+The recipient B would extract the encrypted session key and use his private key (n,d) to
+decrypt it. He would then use this session key with a conventional symmetrical decryption
+algorithm to decrypt the actual message. 
+Typically the transmission would include in plaintext details of the encryption algorithms used,
+padding and encoding methods, initialisation vectors and other details required by the recipient. 
+The only secret required to be kept, as always, should be the private key. 
+</p>
+<p>
+If Mallory intercepts the transmission, he can either try and crack the conventionally-encrypted
+plaintext directly, or he can try and decrypt the encryped session key and then use that in turn. Obviously, this system
+is as strong as its weakest link.
+</p>
+
+<p>
+When signing, it is usual to use RSA to sign the message digest of the message rather than the message itself. 
+A one-way hash function like SHA-1 or SHA-256 is used. The sender A then sends the signed message to B in a format like this
+</p>
+
+<p class="code" style="width: 50%; padding: 20px; background-color: #ccffff; border: medium double red;">
+Hash algorithm = hh<br>
+Message content = xxxxxxxxx...xxx<br>
+Signature = digest signed with RSA = xxxx<br>
+</p>
+
+<p>The recipient will decrypt the signature to extract the signed message digest, <var>m</var>; 
+independently compute the message digest, <var>m'</var>,
+of the actual message content; and check that <var>m</var> and <var>m'</var> are equal.
+Putting the message digest algorithm at the beginning of the message enables the recipient to 
+compute the message digest on the fly while reading the message.
+</p>
+
+<div class="breakout">
+<span class="newthing">CAUTION:</span>
+We cannot emphasise enough that you <em>never</em> use the unadorned versions of RSA described in the simple examples above.
+You <em>must</em> use a proper scheme like PCKS#1 below. In particular when encrypting a message, you must use random padding.
+</div>
+
+<h2><a id="pkcs1schemes"></a>PKCS#1 Schemes</h2>
+<p>
+The most common scheme using RSA is PKCS#1 version 1.5 [<a href="http://www.di-mgt.com.au/rsa_alg.html#PKCS1">PKCS1</a>]. 
+This standard describes schemes for both encryption and signing.
+The encryption scheme PKCS#1v1.5 has some known weaknesses, but these can easily be avoided.
+See <a href="http://www.di-mgt.com.au/rsa_alg.html#weaknesses">Weaknesses in RSA</a> below.
+</p>
+
+<p>
+There is an excellent paper by Burt Kalinski of RSA Laboratories written in the early 1990s
+[<a href="http://www.di-mgt.com.au/rsa_alg.html#KALI93">KALI93</a>] that describes in great detail everything you need to know 
+about encoding and signing using RSA. There are full examples right down to listing out the bytes. 
+OK, it uses MD2 and a small 508-bit
+modulus and obviously doesn't deal with refinements built up over the last decade to deal with
+more subtle security threats, but it's an excellent introduction. 
+</p>
+
+<p>The conventions we use here are explained below in <a href="http://www.di-mgt.com.au/rsa_alg.html#notation">Notation and Conventions</a>.
+</p>
+
+
+<h3><a id="encryptpkcs1"></a>Encryption using PKCS#1v1.5</h3>
+<hr>
+<b>Algorithm:</b> Encryption using PKCS#1v1.5
+<hr>
+INPUT: Recipient's RSA public key, (n, e) of length <code>k = |n|</code> bytes; 
+data <var>D</var> (typically a session key) of length <code>|D|</code> bytes with <code>|D|&lt;=k-11</code>.
+<br>
+OUTPUT: Encrypted data block of length <var>k</var> bytes<br>
+<ol>
+<li>Form the <var>k</var>-byte encoded message block, <var>EB</var>,
+<pre>EB = 00 || 02 || PS || 00 || D
+</pre>
+where <code>||</code> denotes concatenation and
+<var>PS</var> is a string of <code>k-|D|-3</code> non-zero randomly-generated bytes (i.e. at least eight random bytes).
+</li>
+<li>Convert the byte string, <var>EB</var>, to an integer, <var>m</var>, most significant byte first,
+<pre>m = StringToInteger(EB)
+</pre>
+</li>
+<li>Encrypt with the RSA algorithm
+<pre>c = m^e mod n
+</pre>
+</li>
+<li>Convert the resulting ciphertext, <var>c</var>, to a <var>k</var>-byte output block, <var>OB</var><sup>‡</sup>
+<pre>OB = IntegerToString(c, k)
+</pre>
+</li>
+<li>
+Output <var>OB</var>.
+</li>
+</ol>
+<hr>
+
+<p>
+The conversions in steps (2) and (4) from byte string to large integer representative and back again may not be immediately obvious.
+Large integers and byte (bit) strings are conceptually different even though they may both be stored as arrays of bytes in your computer.
+See <a href="http://www.di-mgt.com.au/rsa_alg.html#stringvsinteger">What is the difference between a bit string and an integer?</a>
+</p>
+
+<p class="smaller"><sup>‡</sup>2012-05-23: Thanks to "dani torwS" for pointing out a typo in the formula.</p>
+
+<h3>Worked Example</h3>
+<p>
+Bob's 1024-bit RSA encryption key in hex format:
+</p>
+<pre>n=
+A9E167983F39D55FF2A093415EA6798985C8355D9A915BFB1D01DA197026170F
+BDA522D035856D7A986614415CCFB7B7083B09C991B81969376DF9651E7BD9A9
+3324A37F3BBBAF460186363432CB07035952FC858B3104B8CC18081448E64F1C
+FB5D60C4E05C1F53D37F53D86901F105F87A70D1BE83C65F38CF1C2CAA6AA7EB
+e=010001
+d=
+67CD484C9A0D8F98C21B65FF22839C6DF0A6061DBCEDA7038894F21C6B0F8B35
+DE0E827830CBE7BA6A56AD77C6EB517970790AA0F4FE45E0A9B2F419DA8798D6
+308474E4FC596CC1C677DCA991D07C30A0A2C5085E217143FC0D073DF0FA6D14
+9E4E63F01758791C4B981C3D3DB01BDFFA253BA3C02C9805F61009D887DB0319
+</pre>
+
+A randomly-generated one-off session key for AES-128 might be
+<pre>D=<span style="color: blue">4E636AF98E40F3ADCFCCB698F4E80B9F</span>
+</pre>
+The encoded message block, EB, after encoding but before encryption, with random padding bytes shown in green,
+<pre><span style="color: red">0002</span><span style="color: green">257F48FD1F1793B7E5E02306F2D3228F5C95ADF5F31566729F132AA12009
+E3FC9B2B475CD6944EF191E3F59545E671E474B555799FE3756099F044964038
+B16B2148E9A2F9C6F44BB5C52E3C6C8061CF694145FAFDB24402AD1819EACEDF
+4A36C6E4D2CD8FC1D62E5A1268F496</span><span style="color: red">00</span><span style="color: blue">4E636AF98E40F3ADCFCCB698F4E80B9F</span>
+</pre>
+After RSA encryption, the output is
+<pre>3D2AB25B1EB667A40F504CC4D778EC399A899C8790EDECEF062CD739492C9CE5
+8B92B9ECF32AF4AAC7A61EAEC346449891F49A722378E008EFF0B0A8DBC6E621
+EDC90CEC64CF34C640F5B36C48EE9322808AF8F4A0212B28715C76F3CB99AC7E
+609787ADCE055839829E0142C44B676D218111FFE69F9D41424E177CBA3A435B
+</pre>
+
+<p>
+The above <a href="http://www.di-mgt.com.au/rsa_alg_enc_c.txt">hex data in C format</a>.
+</p>
+
+<p>Note that the output for encryption will be different each time (or should be!) because of the random padding used.
+</p>
+
+<h3>Encrypting a message</h3>
+For a plaintext message, say,
+<pre>PT="Hello world!"
+</pre>
+that is, the 12 bytes in hex format,
+<pre>PT=48656C6C6F20776F726C6421
+</pre>
+Then, using the 128-bit session key from above,
+<pre>KY=4E636AF98E40F3ADCFCCB698F4E80B9F
+</pre>
+and the uniquely-generated 128-bit initialization vector (IV)
+<pre>IV=5732164B3ABB6C4969ABA381C1CA75BA
+</pre>
+the ciphertext using AES-128 in CBC mode with PKCS padding is,
+<pre>CT=67290EF00818827C777929A56BC3305B
+</pre>
+
+<p>The sender would then send a transmission to the recipient (in this case, Bob) including the following information in some agreed format
+</p>
+<pre class="code" style="width: 90%; padding: 20px; background-color: #ccffff; border: medium double red;">Recipient: Bob
+Key Encryption Algorithm: rsaEncryption
+Encrypted Key:
+3D2AB25B1EB667A40F504CC4D778EC399A899C8790EDECEF062CD739492C9CE5
+8B92B9ECF32AF4AAC7A61EAEC346449891F49A722378E008EFF0B0A8DBC6E621
+EDC90CEC64CF34C640F5B36C48EE9322808AF8F4A0212B28715C76F3CB99AC7E
+609787ADCE055839829E0142C44B676D218111FFE69F9D41424E177CBA3A435B
+Content Encryption Algorithm: aes128-cbc
+IV: 5732164B3ABB6C4969ABA381C1CA75BA
+Encrypted Content:
+67290EF00818827C777929A56BC3305B
+</pre>
+
+<p>The usual formats used for such a message are either a <dfn>CMS enveloped-data object</dfn> or XML, but the above summary includes
+all the necessary info (well, perhaps "Bob" might be defined a bit more accurately).
+</p>
+<p>
+<dfn>Cryptographic Message Syntax</dfn> (CMS) [<a href="http://www.di-mgt.com.au/rsa_alg.html#CMS">CMS</a>] is a less-ambiguous version of the earlier PKCS#7 standard (also of the same name)
+and is designed to be used in S/MIME messages.
+CMS enveloped-data objects (yes, that's <em>enveloped</em> not <em>encrypted</em>) use ASN.1 and are encoded using either DER- or BER-encoding.
+(DER-encoding is a stricter subset of BER).
+</p>
+<p>
+The terminology for CMS and ASN.1 may sound messy, but the end results are well-defined and universally-accepted. 
+On the other hand, the XML cryptographic standards are, to be honest, a complete mess: 
+see <a href="http://www.di-mgt.com.au/xmlisxhite.html">XML is xhite</a>.
+Pretty Good Privacy (PGP) also has a format for RSA messages, although PGP stopped using RSA because of patent issues back in the 1990s.
+</p>
+<p>
+Nothing, of course, stops you and your recipient from agreeing on your own format and using that. 
+But be careful, even the experts get these things wrong and accidentally give away more than they realise.
+</p>
+
+
+<h3><a id="signpkcs1"></a>Signing using PKCS#1v1.5</h3>
+<hr>
+<b>Algorithm:</b> Signing using PKCS#1v1.5
+<hr>
+INPUT: Sender's RSA private key, (n, d) of length <code>k = |n|</code> bytes; 
+message, <var>M</var>, to be signed; 
+message digest algorithm, <var>Hash</var>.
+<br>
+OUTPUT: Signed data block of length <var>k</var> bytes<br>
+<ol>
+<li>Compute the message digest <var>H</var> of the message,
+<pre>H = Hash(M)
+</pre>
+</li>
+<li class="vs">Form the byte string, <var>T</var>, from the message digest, <var>H</var>,
+	 according to the message digest algorithm, <var>Hash</var>, as follows
+	 
+<table class="ditable">
+<tbody><tr><th>Hash</th><th>T</th></tr>
+<tr><td>MD5</td><td><code>30 20 30 0c 06 08 2a 86 48 86 f7 0d 02 05 05 00 04 10 || H</code></td></tr>
+<tr><td>SHA-1</td><td><code>30 21 30 09 06 05 2b 0e 03 02 1a 05 00 04 14 || H</code></td></tr>
+<tr><td>SHA-224</td><td><code>30 2d 30 0d 06 09 60 86 48 01 65 03 04 02 04 05 00 04 1c || H</code></td></tr>
+<tr><td>SHA-256</td><td><code>30 31 30 0d 06 09 60 86 48 01 65 03 04 02 01 05 00 04 20 || H</code></td></tr>
+<tr><td>SHA-384</td><td><code>30 41 30 0d 06 09 60 86 48 01 65 03 04 02 02 05 00 04 30 || H</code></td></tr>
+<tr><td>SHA-512</td><td><code>30 51 30 0d 06 09 60 86 48 01 65 03 04 02 03 05 00 04 40 || H</code></td></tr>
+</tbody></table>
+where <var>T</var> is an ASN.1 value of type <dfn>DigestInfo</dfn> encoded using the Distinguished Encoding Rules (DER).
+
+</li>
+
+<li class="vs">Form the <var>k</var>-byte encoded message block, <var>EB</var>,
+<pre>EB = 00 || 01 || PS || 00 || T
+</pre>
+where <code>||</code> denotes concatenation and
+<var>PS</var> is a string of bytes all of value 0xFF of such length so that <code>|EB|=k</code>.
+</li>
+<li class="vs">Convert the byte string, <var>EB</var>, to an integer <var>m</var>, most significant byte first,
+<pre>m = StringToInteger(EB)
+</pre>
+</li>
+<li>Sign with the RSA algorithm
+<pre>s = m^d mod n
+</pre>
+</li>
+<li>Convert the resulting signature value, <var>s</var>, to a <var>k</var>-byte output block, <var>OB</var>
+<pre>OB = IntegerToString(s, k)
+</pre>
+</li>
+<li>
+Output <var>OB</var>.
+</li>
+</ol>
+<hr>
+
+<h3>Worked Example</h3>
+<p>
+Alice's 1024-bit RSA signing key in hex format:
+</p>
+<pre>n=
+E08973398DD8F5F5E88776397F4EB005BB5383DE0FB7ABDC7DC775290D052E6D 
+12DFA68626D4D26FAA5829FC97ECFA82510F3080BEB1509E4644F12CBBD832CF 
+C6686F07D9B060ACBEEE34096A13F5F7050593DF5EBA3556D961FF197FC981E6 
+F86CEA874070EFAC6D2C749F2DFA553AB9997702A648528C4EF357385774575F 
+e=010001
+d=
+00A403C327477634346CA686B57949014B2E8AD2C862B2C7D748096A8B91F736
+F275D6E8CD15906027314735644D95CD6763CEB49F56AC2F376E1CEE0EBF282D
+F439906F34D86E085BD5656AD841F313D72D395EFE33CBFF29E4030B3D05A28F
+B7F18EA27637B07957D32F2BDE8706227D04665EC91BAF8B1AC3EC9144AB7F21
+</pre>
+
+The message to be signed is, of course,
+<pre>M="abc"
+</pre>
+that is, the 3 bytes in hex format,
+<pre>PT=616263
+</pre>
+The message digest algorithm is SHA-1, so
+<pre>H = Hash("abc") = <span style="color: blue">A9993E364706816ABA3E25717850C26C9CD0D89D</span>
+</pre>
+The DigestInfo value for SHA-1 is
+<pre>T=
+<span style="color: green">3021300906052B0E03021A05000414</span><span style="color: blue">A9993E364706816ABA3E25717850C26C9C
+D0D89D</span>
+</pre>
+
+The encoded message block, EB, after encoding but before signing is
+<pre><span style="color: red">0001</span>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF<span style="color: red">00</span><span style="color: green">302130
+0906052B0E03021A05000414</span><span style="color: blue">A9993E364706816ABA3E25717850C26C9CD0D89D</span>
+</pre>
+After RSA signing, the output is
+<pre>60AD5A78FB4A4030EC542C8974CD15F55384E836554CEDD9A322D5F4135C6267
+A9D20970C54E6651070B0144D43844C899320DD8FA7819F7EBC6A7715287332E
+C8675C136183B3F8A1F81EF969418267130A756FDBB2C71D9A667446E34E0EAD
+9CF31BFB66F816F319D0B7E430A5F2891553986E003720261C7E9022C0D9F11F
+</pre>
+
+<p>
+The above <a href="http://www.di-mgt.com.au/rsa_alg_sig_c.txt">hex data in C format</a>.
+</p>
+
+<h2><a id="weaknesses"></a>Weaknesses in RSA</h2>
+<dl>
+<dt>Small encryption exponent</dt>
+<dd>
+If you use a small exponent like <code>e=3</code>
+<b><i>and</i></b> send the same message to different recipients
+<b><i>and</i></b> just use the RSA algorithm without adding random padding to the message, 
+then an eavesdropper could recover the plaintext.
+
+	<div style="margin: 10px; padding: 10px; border: 1px #c00 dashed;margin-right: 200px;">
+		<img src="./RSA Algorithm_files/new.gif" width="31" height="12" alt="New"><b>2010-10-23:</b> 
+		For an example of this, see <a href="http://www.di-mgt.com.au/crt.html#crackingrsa">Cracking RSA</a> on our page on the
+		<a href="http://www.di-mgt.com.au/crt.html">The Chinese Remainder Theorem</a>.
+	</div>
+
+</dd>
+<dt>Small encryption exponent and small message</dt>
+<dd>
+If you use <code>e=3</code> and just encrypt a small message <var>m</var> without padding where 
+<code>m<sup>3</sup> &lt; n</code> then your ciphertext <var>c</var> can easily be broken by simply computing its real cube root.
+
+For example, if we have the public key <code>(n, e) = (25777, 3)</code> and just encrypt the small message <code>m = 10</code>
+then the ciphertext is <code>c = 1000</code>. The secure properties of RSA encryption only work if <code>m<sup>e</sup> &gt; n</code>.
+
+</dd>
+
+<dt>Using the same key for encryption and signing</dt>
+<dd>Given that the underlying mathematics is the same for encryption and
+signing, only in reverse, if an attacker can convince a key holder to sign an unformatted encrypted message using the same key
+then she gets the original.
+</dd>
+
+<dt>Using a common modulus for different users</dt>
+<dd>Do not use the same modulus <var>n</var> with different <var>(e<sub>i</sub>, d<sub>i</sub>)</var> pairs for different users in a group.
+Given his own pair <var>(e<sub>1</sub>, d<sub>1</sub>)</var>, user 1 can factorize the common <var>n</var> into 
+<var>p</var> and <var>q</var> and hence compute the private exponents <var>d<sub>i</sub></var> of all the other users.
+	
+	<div style="margin: 10px; padding: 10px; border: 1px #c00 dashed;margin-right: 200px;">
+		<img src="./RSA Algorithm_files/new.gif" width="31" height="12" alt="New"><b>2012-12-01:</b> 
+		For more details, see our page
+		<a href="http://www.di-mgt.com.au/rsa_factorize_n.html">RSA: how to factorize N given d</a>.
+	</div>
+
+</dd>
+
+<dt>Acting as an oracle</dt>
+<dd>There are techniques to recover the plaintext if a user just blindly returns the RSA transformation of the input.
+So don't do that. 
+</dd>
+</dl>
+
+<h3>Solutions</h3>
+<ol class="vs">
+<li>Don't use the same RSA key for encryption and signing.</li>
+<li>Don't encrypt or sign a blind message.</li>
+<li>If using PKCS#v1.5 encoding, use <code>e=0x10001</code> for your public exponent.</li>
+<li>Always format your input before encrypting or signing.</li>
+<li>Always add <em>fresh</em> random padding - at least 8 bytes - to your message before encrypting.</li>
+<li>When decrypting, check the format of the decrypted block. If it is not as expected, return an error message,
+not the decrypted string.</li>
+<li>Similarly, when verifying a signature, if there is any error whatsoever, just respond with "Invalid Signature".</li>
+</ol>
+
+
+
+<h2><a id="advanced"></a>More Advanced Schemes</h2>
+<p>
+The underlying RSA computations
+</p>
+<p class="code">
+c = m<sup>e</sup> mod n, m' = c<sup>d</sup> mod n; s = m<sup>d</sup> mod n, m' = s<sup>e</sup> mod n
+</p>
+<p>
+are always the same, but there are many variants of how these can be used inside an encryption or digital signature <dfn>scheme</dfn>.
+Here are some of them.
+</p>
+
+<h3><a id="oaep"></a>RSAES-OAEP</h3>
+<p>
+The OAEP encoding technique for encryption is described in PKCS#1 version 2 and in IEEE P136.
+It is more secure than the PKCS#1v1.5 encoding method described above, perhaps provably secure. 
+The encoding technique involves a mask generation function (MGF) based on a hash function and there is no obvious structure in the encoded
+block, unlike the PKCS#1v1.5 encoding method.
+Despite being the recommended method for the last decade, OAEP is not used in practice as much as you'd expect. In fact, hardly at all.
+That said, if you have a choice in the matter, we recommend that you <em>should</em> use OAEP if you can.
+</p>
+
+<h3><a id="pss"></a>RSASSA-PSS</h3>
+<p>
+The PSS encoding method is used to encode before creating a signature. 
+The technique is described in PKCS#1v2.1 and is similar in design to the OAEP encoding used for
+encryption involving an MGF based on a hash function. 
+However, there are active patents associated with this method, so sensible implementors avoid it like the plague.
+Since there are currently no known weaknesses with the PKCS#1v1.5 signature scheme and the nasty smell of patents still lingers,
+PSS is also not used in practice very much.
+</p>
+
+<h3><a id="x931"></a>X9.31 Signature Scheme</h3>
+<p>
+ANSI standard X9.31 [<a href="http://www.di-mgt.com.au/rsa_alg.html#AX931">AX931</a>] requires using 
+<dfn>strong primes</dfn> derived in a way to avoid particular attacks that are probably no longer relevant.
+X9.31 uses a method of encoding the message digest specific to the hash algorithm. 
+It expects a key with length an exact multiple of 256 bits.
+The same algorithm is also specified in P1363 [<a href="http://www.di-mgt.com.au/rsa_alg.html#P1363">P1363</a>] where it is called IFSP-RSA2.
+The scheme allows for the public exponent to be an even value, but we do not consider that case here; all our values of
+<var>e</var> are assumed to be odd.
+The message digest hash, <var>H</var>, is encapsulated to form a byte string as follows
+</p>
+<pre>EB = 06 || PS || 0xBA || H || 0x33 || 0xCC
+</pre>
+<p>
+where <var>PS</var> is a string of bytes all of value 0xBB of length 
+such that <code>|EB|=|n|</code>, and 0x33 is the ISO/IEC 10118 part number<sup>†</sup> for SHA-1.
+The byte string, <var>EB</var>, is converted to an integer value, the message representative, <var>f</var>. 
+</p>
+<p class="smaller">
+† ISO/IEC 10118 part numbers for other hash functions are:
+SHA-1=0x33, SHA-256=0x34, SHA-384=0x36, SHA-512=0x35, RIPEMD=0x31.
+</p>
+
+<hr>
+<b>Algorithm:</b> Forming an X9.31/RSA2 signature value from the message representative (for odd <var>e</var>).
+<hr>
+INPUT: Signer's RSA private key, (n, d); 
+integer, <var>f</var>, where 
+<span class="eqn">0 &lt;= f &lt; n</span> and 
+<span class="eqn">f ≡ 12 (mod 16)</span>.
+<br>
+OUTPUT: Signature, an integer <var>s</var>, <span class="eqn">0 &lt;= s &lt; n/2</span>,
+i.e. a value at least one bit shorter than <var>n</var>.
+<br>
+<ol>
+<li>
+<span class="eqn">
+t = f<sup>d</sup> mod n
+</span>
+</li>
+<li>
+<span class="eqn">
+s = min{t, n-t}
+</span>
+</li>
+<li>
+Output <var>s</var>.
+</li>
+</ol>
+<hr>
+The integer, <var>s</var>, is converted to a byte string of length <code>|n|</code> bytes.
+
+<hr>
+<b>Algorithm:</b> Extracting the message representative from an X9.31/RSA2 signature value (for odd <var>e</var>).
+<hr>
+INPUT: Signer's RSA public key, (n, e); 
+signature, <var>s</var>.
+<br>
+OUTPUT: Message representative, <var>f</var>, such that <span class="eqn">t ≡ 12 (mod 16)</span>, or "invalid signature".
+<br>
+<ol>
+<li>If <var>s</var> is not in <span class="eqn">[0,(n-1)/2]</span>, output "invalid signature" and stop.
+</li>
+<li>Compute
+<span class="eqn">t = s<sup>e</sup> mod n</span>
+</li>
+<li>
+If <span class="eqn">t ≡ 12 (mod 16)</span> then let <span class="eqn">f = t</span>.
+</li>
+<li>
+Else let <span class="eqn">f = n-t</span>. 
+If <span class="eqn">NOT f ≡ 12 (mod 16)</span>, output "invalid signature" and stop.
+</li>
+<li>
+Output <var>f</var>.
+</li>
+</ol>
+<hr>
+
+The integer <var>f</var> is converted to a byte string of length <code>|n|</code> bytes and then parsed to confirm that
+<em>all</em> bytes match the required format
+<pre>EB = 06 || PS || 0xBA || H || 0x33 || 0xCC
+</pre>
+If not, output "invalid signature" and stop; otherwise output the extracted message digest hash, <var>H</var>.
+
+
+
+<h3><a id="iso9796"></a>ISO/IEC 9796</h3>
+<p>
+IOS/IEC 9796 is an old standard devised before there was a recognised message digest function like MD5 or SHA-1.
+It allows the entire message to be recovered. Unfortunately, it is considered broken for signing plain text messages, but is still OK
+for signing message digest values. 
+It is used in the AUTACK scheme described in [<a href="http://www.di-mgt.com.au/rsa_alg.html#EDIFACT">EDIFACT</a>].
+</p>
+<p>
+The encapsulation mechanism weaves the input bytes into a format exactly one bit shorter than the RSA key.
+The signing mechanism is similar to that in ANSI X9.31 described above, but the message representative, <var>f</var>, is required to be
+<span class="eqn">f ≡ 6 (mod 16)</span>, instead of modulo 12. 
+In other words, make sure the last 4 bits are equal to 0x6 instead of 0xC.
+</p>
+
+<h3><a id="rsakem"></a>RSA-KEM</h3>
+<p>
+The RSA-KEM Key Transport Algorithm encrypts a <em>random</em> integer 
+with the recipient's public key, and then uses a symmetric key-wrapping 
+scheme to encrypt the keying data. KEM stands for <dfn>Key Encapsulation Mechanism</dfn>. 
+The general algorithm is as follows
+</p>
+<ol>
+<li>Generate a random integer <var>z</var> between 0 and <var>n</var>-1.</li>
+<li>Encrypt the integer <var>z</var> with the recipient's RSA public key:
+<span class="eqn">c = z<sup>e</sup> mod n</span>.
+</li>
+<li>Derive a key-encrypting key KEK from the integer <var>z</var>.</li>
+<li>Wrap the keying data using KEK to obtain wrapped keying data WK.</li>
+<li>Output <var>c</var> and WK as the encrypted keying data.</li>
+</ol>
+<p>
+This method has a higher security assurance than PKCS#1v1.5
+because the input to the underlying RSA operation is random and independent 
+of the message, and the key-encrypting key KEK is derived from it in a strong way.
+The downside is that you need to implement a key derivation method 
+(of which there are many varieties)
+and a key wrapping algorithm.
+The encoding of the final data into the recommended ASN.1 format is messy, too.
+For more details, see the latest version of [<a href="http://www.di-mgt.com.au/rsa_alg.html#CMSRSAKEM">CMSRSAKEM</a>].
+</p>
+
+
+
+<h3><a id="ferg"></a>Ferguson-Schneier Encryption</h3>
+<p>
+In their book [<a href="http://www.di-mgt.com.au/rsa_alg.html#FERG03">FERG03</a>], Niels Ferguson and Bruce Schneier suggest a much simpler method of encryption.
+They suggest using the same modulus <var>n</var> for both encryption and signatures but to use 
+<span class="eqn">e=3</span> for signatures
+and <span class="eqn">e=5</span> for encryption 
+(you need to make sure that the modulus <span class="eqn">n = pq</span> satisfies both <span class="eqn">gcd(3,(p-1)(q-1))=1</span>
+and <span class="eqn">gcd(5,(p-1)(q-1))=1</span>).
+</p>
+<p>
+Their method uses RSA to encrypt a random integer and use a hash function to derive the actual content encryption key,
+thus removing any structural similarities between the actual CEK and the data encrypted by the RSA.
+They recommend using the function, 
+<span class="eqn">Hash(x):=SHA256(SHA256(x))</span>, for hashing data.
+</p>
+
+<hr>
+<b>Algorithm:</b> Ferguson-Schneier Encrypt Random Key with RSA.
+<hr>
+INPUT: Recipient's RSA public key, (n, e).
+<br>
+OUTPUT: Content encryption key, CEK; RSA-encrypted CEK, <var>c</var>.
+<br>
+<ol>
+<li>Compute the exact bit length of the RSA key,
+	<span class="eqn">k = ceiling(log<sub>2</sub>(n+1))</span>.
+</li>
+<li>Choose a random <var>r</var> in the interval <span class="eqn">[0, 2<sup>k</sup>-1]</span>.
+</li>
+<li>
+Compute the content encryption key by hashing <var>r</var>, 
+<span class="eqn">CEK=Hash(r)</span>. 
+</li>
+<li>
+<span class="eqn">c = r<sup>e</sup> mod n</span>. 
+</li>
+<li>
+Output CEK and <var>c</var>.
+</li>
+</ol>
+<hr>
+
+<p>
+For a plaintext message, <var>m</var>, the transmission sent to the recipient is
+<span class="eqn">IntegerToString(c) || E<sub>CEK</sub>(m)</span>, 
+where <span class="eqn">E<sub>CEK</sub>(m)</span> is the result of encrypting <var>m</var> with a symmetrical
+encryption algorithm using key, CEK. 
+Given that the recipient knows the size of the RSA key and hence the exact number of bytes needed to encode
+<var>c</var>, it is a simple matter to parse the input received from the sender.
+</p>
+
+<p>
+For example code of this algorithm in Visual Basic (both VB6 and VB.NET) using our <span class="tm-pki">CryptoSys PKI</span> Toolkit, see
+<a href="http://www.cryptosys.net/pki/rsa_ferguson_schneier.html">Ferguson-Schneier RSA Encryption</a>.
+</p>
+
+<h2><a id="notation"></a>Notation and Conventions</h2>
+<p>We use the following notation and conventions in this page.</p>
+
+<ul>
+<li class="vs"><span class="eqn">A || B</span> denotes concatenation of byte (or bit) strings <var>A</var> and <var>B</var>.</li>
+<li class="vs"><span class="eqn">|B|</span> denotes the length of the byte (or bit) string <var>B</var> in bytes.</li>
+<li class="vs"><span class="eqn">|n|</span> denotes the length** of the non-negative integer <var>n</var> in bytes,
+<span class="eqn">|n| = ceiling(log<sub>256</sub>(n+1))</span>.
+</li>
+<li><span class="eqn">IntegerToString(i, n)</span> is an <var>n</var>-byte encoding of the integer <var>i</var> with the most significant
+byte first (i.e. in "big-endian" order). So, for example,
+<pre class="eqn">IntegerToString(1, 4)="00000001",
+IntegerToString(7658, 3)="001DEA"
+</pre>
+</li>
+<li class="vs"><span class="eqn">StringToInteger(S)</span> is the integer represented by the byte string <var>S</var> 
+with the most significant byte first.
+</li>
+<li><span class="eqn">ceiling(x)</span> 
+	is the smallest integer, <var>n</var>, such that <span class="eqn">n ≥ x</span>.
+	This is also written as <span class="eqn">⌈x⌉</span>.
+</li>
+</ul>
+<p class="smaller">** Strictly speaking, this is the length of the shortest byte string that can encode the integer.</p>
+
+<h2><a id="stringvsinteger"></a>What is the difference between a bit string and an integer?</h2>
+<p>
+A <strong>string</strong> is a contiguous sequence of symbols, so the string "cat" is a sequence of the letters 'c', 'a' and 't'. 
+A <strong>bit string</strong> is sequence of binary digits (bits) '0' and '1'. A <strong>byte string</strong> is similar except
+it consists of bytes, which are in turn sequences of 8 bits. 
+So a <strong>bit string</strong> and a <strong>byte string</strong> are the same thing, except the latter is restricted to multiples of 8 bits.
+For example, using hexadecimal representation, the byte string "8002EA" is a sequence of 3 bytes, 0x80, 0x02 and 0xEA;
+and is equal to the bit string "100000000000001011101010".
+</p>
+<p>
+A string can be split into sub-strings (e.g. "8002" and "EA") and two strings can be concatenated (joined up) to make another string.
+The order of symbols is important. 
+The usual convention is to write byte strings with the most significant byte first ("big-endian" or network byte order).
+</p>
+<p>
+An <strong>integer</strong> is a whole number that obeys the usual rules of <em>integer</em> arithmetic (1+1=2, 5-2=3, 3x2=6, 6/3=2)
+and modular arithmetic (10+6≡4 (mod 12)). There is no limit in theory as to how large an integer can be: you can always add one to any integer. 
+The integer 8,389,354 in decimal is the same as the number 0x8002EA in hexadecimal notation, but is not the same as the byte string
+"8002EA", even though it looks the same and may well be stored in your computer in the same form.
+</p>
+<p>
+You can increment the integer 8389354 to get 8389354+1=8389355 (0x8002EB); but you cannot "increment" the byte string "8002EA".
+On the other hand, you can concatenate the byte strings "8002" and "EA" to make "8002EA"; 
+but the integers 8389 and 354 do not add to make 8389354.
+The byte string "00008002EA" is strictly not the same as "8002EA"; but the integers 0x008002EA and 0x8002EA are equal.
+</p>
+<p>
+With RSA encryption, we typically want to encrypt a session key which is a <em>bit string</em>, 
+but the RSA arithmetic <span class="eqn">c = m^e mod n</span> is done
+with <em>integers</em>, so we need to <dfn>represent</dfn> the bit string as an integer first 
+(in practice, we usually add some random bytes and other padding, but we'll ignore that for the time being).
+Once the RSA operation has been completed, we have another integer, c, 
+but we need to store the result as a <em>bit string</em>, so we <dfn>encode</dfn> the integer as a bit (byte) string and pass
+that string onto our recipient.
+</p>
+<p>
+<b>Example:</b> Suppose we wish to encrypt the 3-byte/24-bit key bit string "8002EA" using the RSA public key
+(n=25009997=0x017D9F4D, e=5)<sup>†</sup>. 
+For simplicity in this insecure example, we will use the basic RSA algorithm with no padding.
+</p>
+<ol>
+<li class="vss"> The message block is the byte string "8002EA".</li>
+<li> Compute the message representative
+<pre>m = StringToInteger("8002EA") = 8389354
+</pre>
+</li>
+<li>Encrypt with the RSA algorithm
+<pre>c = 8389354^5 mod 25009997 = 2242555
+</pre>
+</li>
+<li>Encode the result as a byte string
+<pre>OB = IntegerToString(2242555, 4) = 002237FB
+</pre>
+</li>
+</ol>
+<p>
+Note that the maximum length of the output block is 4 bytes, because the largest possible integer result is 0x017D9F4C 
+(<span class="eqn">= n-1</span>),
+which requires 4 bytes to store in encoded form.
+</p>
+
+<p class="smaller"><sup>†</sup> Thanks to "doctorjay" for pointing out that e=3 did not work for the earlier version of this example.
+</p>
+
+<h2><a id="implementation"></a>Implementation in C and VB</h2>
+<p>
+We show an example implementation of the RSA algorithm in C in our 
+<a href="http://www.di-mgt.com.au/bigdigits.html">BigDigits</a> library. 
+It's not necessarily the most efficient way, and could be improved in its security, but it shows the maths involved. 
+Look in the 
+<a href="http://www.di-mgt.com.au/bigdigits.html#tests">BigDigits Test Functions</a>.
+</p>
+
+<p>There is an example in VB6/VBA code at <a href="http://www.di-mgt.com.au/crypto.html#dhvb">RSA and Diffie-Hellman in Visual Basic</a>.
+</p>
+
+<p>For a professional implementation, see our commercial <a href="http://www.cryptosys.net/pki/">CryptoSys PKI Toolkit</a>
+which can be used with Visual Basic, VB6, VBA, VB2005+, C/C++ and C# applications. 
+There are examples using the `raw' RSA functions
+to carry out <a href="http://www.cryptosys.net/pki/rsa_encrypt_ex.html">RSA Encryption</a> and
+<a href="http://www.cryptosys.net/pki/rsa_sign_ex.html">RSA Signing</a>.
+</p>
+
+<h2><a id="references"></a>References</h2>
+<ul>
+<li><b><a id="AX931"></a>[AX931]</b>
+ANSI X9.31-1998
+<cite>Digital Signatures using Reversible
+Public Key Cryptography for the Financial Services Industry (rDSA)</cite>,
+Appendix A,
+American National Standards Institute,
+1998.</li>
+
+<li><a id="CMS"></a><b>[CMS]</b>
+<a href="http://www.ietf.org/rfc/rfc5652.txt">RFC 5652</a>.                                     
+<cite>Cryptographic Message Syntax (CMS)</cite>,
+R. Housley, September 2009 (obsoletes RFC3852, RFC3369, RFC2630).
+</li>
+
+<li><a id="CMSRSAKEM"></a><b>[CMSRSAKEM]</b>
+<a href="http://www.ietf.org/rfc/rfc5990.txt">RFC 5990</a>                            
+<cite>Use of the RSA-KEM Key Transport Algorithm in the Cryptographic Message Syntax (CMS)</cite>,
+J. Randall, B.Kaliski, J. Brainard, S. Turner.
+September 2010.
+</li>
+
+<li><b><a id="COCK73"></a>[COCK73]</b>
+Clifford Cocks. <cite>A Note on 'Non-Secret Encryption'</cite>, CESG Research Report,
+20 November 1973.
+</li>
+
+<li><b><a id="EDIFACT"></a>[EDIFACT]</b>
+UN/EDIFACT Finance Group D6 SWG-F. <cite>Recommended Practice For Message Flow And Security For EDIFACT Payments</cite>, Version 2v03,
+1 October 2000.
+</li>
+
+<li><b><a id="FERG03"></a>[FERG03]</b>
+Niels Ferguson and Bruce Schneier, 
+<cite><a href="http://www.amazon.com/dp/0471223573/?tag=diman0f6-20">Practical Cryptography</a></cite>, Wiley, 2003.
+Note that this book has since been re-issued in 2010 almost unchanged as 
+<cite><a href="http://www.amazon.com/dp/0470474246/?tag=diman0f6-20">Cryptography Engineering</a></cite>
+by Niels Ferguson, Bruce Schneier and Tadayoshi Kohno.
+</li>
+
+<li><b><a id="KALI93"></a>[KALI93]</b>
+Burton Kalinski. <cite>Some Examples of the PKCS Standards</cite>, RSA Laboratories, 1999,
+&lt;<a href="http://www.di-mgt.com.au/docs/examplesPKCS.txt">link</a>&gt;.
+</li>
+
+<li><a id="NIST-80057"></a><b>[NIST-80057]</b>
+NIST Special Publication 800-57,
+<cite>Recommendation for Key Management - Part 1: General (Revised)</cite>,
+Elaine Barker et al,
+National Institute of Standards and Technology, March 2007.
+</li>
+
+<li><b><a id="P1363"></a>[P1363]</b>
+IEEE P1363 <cite>Standard Specifications for Public Key Cryptography</cite>, IEEE,
+November 1993.
+</li>
+
+<li><b><a id="PKCS1"></a>[PKCS1]</b>
+RSA Laboratories. <cite>PKCS #1 v2.1: RSA Encryption Standard.</cite> June 2002.
+Republished as <a href="http://www.ietf.org/rfc/rfc3447.txt">RFC 3447</a>.
+</li>
+
+<li><b><a id="RIVE78"></a>[RIVE78]</b>
+R. Rivest, A. Shamir and L. Adleman. <cite>A Method for Obtaining Digital Signatures
+and Public-Key Cryptosystems.</cite> Communications of the ACM, 21 (2), pp. 120-126,
+February 1978, &lt;<a href="http://people.csail.mit.edu/rivest/Rsapaper.pdf">link</a>&gt;.
+</li>
+
+
+</ul><!-- END OF REFERENCES LIST -->
+
+<h2><a id="theauthor"></a>Author</h2>
+<p>
+The content of this page is all original work written by <a href="http://www.di-mgt.com.au/who_davidireland.html">David Ireland</a>,
+who reserves all intellectual rights.
+You may freely link to this page. 
+You may use parts of the work for fair dealing for the purposes of research or private study as permitted under
+copyright law,
+but you may not post any part of this content on another web site without the explicit permission in writing of the author.
+</p>
+
+
+<h2><a id="feedback"></a>Feedback</h2>
+<p><a href="http://www.di-mgt.com.au/contactmsg.php?topic=Cryptography+in+general">Contact us</a> to give feedback or ask a question.
+To comment on this page, 
+<a href="http://www.di-mgt.com.au/contactmsg.php?topic=Cryptography+in+general">send us a message</a> with <code>rsa_alg</code> in the 
+message and we'll add it to the comments.
+Please note we are not an oracle for college assignment questions. Your tutors read this page, too!
+</p>
+
+<p><i>This page last updated 6 December 2016</i></p><!-- $CUSTOM$ -->
+
+
+<div id="comments" class="comments">
+<h2><a id="makeacomment"></a>Comments</h2>
+<div>
+<!--
+<a href="comment_form.php?id=15695083" onclick="openCommentWindow('comment_form.php?id=15695083'); return false;">Post 
+a comment</a> on this page.
+<noscript><div class="warn"> (JavaScript is disabled in your browser: some features on the comment page will not work.)</div>
+</noscript>	
+-->
+[Go to <a href="http://www.di-mgt.com.au/rsa_alg.html#end_of_comments">last comment</a>]
+</div>
+
+<!-- BEGIN COMMENTS-CONTENT -->
+<p><strong>123</strong> comments so far</p>
+
+<blockquote>
+<p>I learned this site from http://www.issociate.de/board/post/267506/Encryption_size.html. This is an excellent and indepth artical.</p>
+<div><cite><b>mimime</b> | usa - Fri, Feb 19 2010 00:30 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>it is one of the most great tutorial about RSA , it was very helpful </p><p>Thank you very much</p>
+<div><cite><b>mallek balli</b> | libya - Wed, Mar 10 2010 16:39 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>I PREPARED MY WHOLE PROJECT ABOUT RSA COMPLETLY,,,,,,,,,
+THANQ VERY MUCH</p>
+<div><cite><b>MANDA GOPAL</b> | INDIA - Sun, Mar 14 2010 04:52 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>this explanation is better than the best</p>
+<div><cite><b>rishi</b> |  - Sat, Mar 20 2010 18:23 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>this is awsome article thank u very much</p>
+<div><cite><b>yogesh kumbhar</b> |  - Tue, Mar 23 2010 06:22 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>tHANKS A LOt....</p>
+<div><cite><b>vijac</b> | iNDIA - Fri, Mar 26 2010 00:48 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>thankyou so much for such a great content....... now i can understand rsa in a better way and can prepare my project.......</p>
+<div><cite><b>shivani anand</b> |  - Sat, Mar 27 2010 14:14 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>really useful tutorial on rsa encryption - cheers! im a bit confused about calculating d from ed=1%phi though. in your example phi=20 and e=3 so i would have thought 1%20 = 1, therefore 3d=1, therefore d = 1/3. i know im wrong since this doesnt work, however i cant seem to make sense of it. if i try the other formula d=(e^-1)%phi then i get d=(3^-1)%20 = (1/3)%20 = 0???
+im a bit stuck!</p>
+<div><cite><b>pete</b> | australia - Thu, Apr  1 2010 09:48 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>pete, all calculations are done on integers. "1/e mod n" means "inverse of e, modulo n" (if it exists) and NOT a division of 1 by e. You cannot skip "mod n" part.</p>
+<div><cite><b>janisozaur</b> |  - Sat, Apr  3 2010 18:06 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Be careful with the meaning of (mod). It's not the same as the % operator. We're also talking non-negative whole numbers here, so no fractions. </p><pre>ed \equiv 1 (mod phi)
+</pre><p>given e=3 and phi=20 means find an integer d such that when ed is divided by 20, the remainder is 1.</p><pre>Try d=1, ed=3x1=3, 3 divided by 20 is 0 remainder 3, so no good
+Try d=2, ed=3x2=6, 6 divided by 20 is 0 remainder 6.
+...
+Try d=6, ed=3x6=18, 18 divided by 20 is 0 remainder 18.
+Try d=7, ed=3x7=21, 21 divided by 20 is 1 remainder 1 =&gt; HOORAY.
+</pre><p>So d=7 satisfies the relationship. (There are other, larger values of d that work, too).</p>
+<div><cite><b>Dave</b> | Moderator - Sun, Apr  4 2010 01:56 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>It's a great content, vry easy to understand and very helpfull.</p>
+<div><cite><b>bejhe</b> | Indonesia - Thu, Apr  8 2010 09:06 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>In the Key Generation Algorithm section in point 2 you define </p><pre>phi = (p-1)(q-1)
+</pre><p>However, in a book of mine (by Ferguson and Schneier) it is mentioned that this value should actually be defined as </p><pre>phi = lcm(p-1, q-1)
+</pre><p>Now, having read all the values from gpg private key (see rfc 4880) it seems, that indeed </p><pre>ed = 1 (mod lcm(p-1, q-1))
+</pre><p>and if phi is defined in the former way, it produces some very large values (which only matters in a way that is unequal to 1). All other conditions are fulfilled - they are both the same in the book and here. Why is that and which is more correct?</p>
+<div><cite><b>janisozaur</b> | Poland - Thu, Apr 15 2010 08:05 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>@janisozaur:
+Both methods are equally valid and both give identical results as far as encryption and decryption go. Bruce Schneier's earlier book "Applied Cryptography" used the (p-1)(q-1) form, as does Menezes (see ch 8). You will get different values for d, but it does not matter, as they both work and give exactly the same results.</p><p>IOHO it's not worth the extra hassle to compute the LCM, but you could -- it will always be at least half the value [why?] but this really doesn't matter with practical key sizes where you save one or two bits out of 2000.</p>
+<div><cite><b>Dave</b> | Moderator - Sun, Apr 18 2010 10:49 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>THIS ARTICLE WAS EXCELLENT.THANX FOR UR INFORMATION. THIS INFO IS SO MUCH HELPFUL FOR MY INTERVIEWS</p>
+<div><cite><b>SAI</b> | CHENNAI - Sat, Apr 17 2010 17:27 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>All at one place. Good article.</p>
+<div><cite><b>Rajendra</b> |  - Mon, May 24 2010 06:38 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>a gr8 collection on RSA...but i dint find the strength of RSA....pls provide it as soon as possible</p>
+<div><cite><b>jigar</b> |  - Mon, May 31 2010 05:30 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Thank you so much for this amazing article.</p><p>Is answer to "Question: Why couldn't we use e=17 here?" "Because there is no such d = 17^-1 mod 17680" ?</p><p>Another question, why is message to be signed padded with FF bytes? I understand that we need to expand it, but when encrypting we use random bytes, which is reasonable. Why can't (shouldn't) we use random bytes for signing as well?</p>
+<div><cite><b>Andrey</b> |  - Sat, Jun  5 2010 19:08 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>@Andrey. e=17: Yes, and that is because gcd(17,17680)&gt;1 since phi = 17680 = 1040 x 17.</p><p>Padding with FF: Because we want the value of the signature to always be the same. Remember there is no secrecy with a signature. But for encryption we want to hide any structure and so we use random bytes (in fact, for encryption, if you don't use random bytes you can leak information).</p>
+<div><cite><b>Dave</b> | Moderator - Sun, Jun  6 2010 04:40 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Great article.. very informative!!</p>
+<div><cite><b>Rachel</b> |  - Fri, Jun 11 2010 09:42 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Hi.</p><p>I really appreciated this article, but i have a doubt. Given an encrypted message (m), how do i estimate the key size, supposing i don't know the modulus.</p><p>Thanks, i really need this information.</p>
+<div><cite><b>Larissa Eglem</b> | Brazil - Thu, Jul  8 2010 21:19 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>can u explain this method with different example for RSA Algorithm.</p><p>for eg. p=17 q=23</p>
+<div><cite><b>Thiyagu</b> | Namakkal - Mon, Jul 12 2010 08:59 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Excellent article! Thank you!</p><p>Quick question: on the alternative Chinese Remainder Theorem it is stated that "dP = (1/e) mod (p-1)". My understanding is that all divisions are integer, therefore "1/e" will almost always be zero (unless e is equal to 1, which will normally be the case). What am I missing?</p><p>Thanks again!</p>
+<div><cite><b>Jeff</b> |  - Thu, Aug  5 2010 13:28 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>@Jeff. "1/e" is the modular inverse, also written as e^{-1}. To use a simpler notation, </p><pre>d = (1/e) mod n
+</pre><p>is defined as the value of d such that ed = 1 mod n.</p><p>See the discussion around April 3 by pete and janisozaur.</p>
+<div><cite><b>Dave</b> | Moderator - Sat, Aug  7 2010 20:34 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>please explain extended eucild's algorithm..</p>
+<div><cite><b>sid</b> |  - Fri, Jun 25 2010 08:35 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>@sid. See our new page <a href="http://www.di-mgt.com.au/euclidean.html">http://www.di-mgt.com.au/euclidean.html</a></p>
+<div><cite><b>Dave</b> | Moderator - Sat, Aug 14 2010 02:53 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Really excellent explanation, thank-you.</p><p>One thing I didn't understand: you say (in http://www.di-mgt.com.au/rsa_alg.html#simpleexample) that p=3,q=11 is the lowest value of n=pq for which RSA works.  </p><p>I tried p=3,q=5 (n=15) and, using e=d=3, encrypted and decrypted all non-trivial messages m=2..(n-2) and it all seemed to work!</p>
+<div><cite><b>Simon</b> | Bath, UK - Sat, Sep 11 2010 21:09 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>@Simon. Perhaps a better phrase would be "for which RSA is interesting".</p><p>With n=15 you always have e = d, so the private key is the same as the public one. So it "works" but isn't much use for a cryptosystem.</p><p>With n=15, e=3, all but 6 out of 15 ciphertexts are the same as m, and those that are different are related (eg 2^3 mod 15 = 8 and 8^3 mod 15 =2).</p><p>With n=15, e=5, *all* ciphertexts are the same, because raising to the 5th power modulo 15 is the identity
+transformation.</p>
+<div><cite><b>Dave</b> | Moderator - Wed, Sep 15 2010 10:30 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>By identity transformation we mean a^5 == a (mod 15) for all integers a. (using == to mean 'is congruent to')</p><p>Proof. We have a^5 == a (mod 5) and a^3 == a (mod 3) by Fermat's Little Theorem for all integers a. Now a^5 = a^3.a^2 == a.a^2 = a^3 == a (mod 3). Since gcd(5,3)=1 then a^5 == a (mod 15) for all integers a.</p>
+<div><cite><b>Dave</b> | Moderator - Wed, Sep 15 2010 17:48 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>hi
+i have a question any1 plx help me solving this..]
+alice wants to write message that look like it was digitally signed by Bob. She notices that Bob's public RSA key is (17,391). To what exponent should she raise her message?</p>
+<div><cite><b>Iman</b> | pakistan - Sun, Sep 26 2010 05:46 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>145.</p><p>Given e=17, n=391. Factor n = 391 = 17 x 23. Phi = (17-1)(23-1) = 352. d = e^{-1} mod phi = 17^{-1} mod 352 = 145.</p><p>Check: Bob wants to sign message say m=101. Signature s = m^d mod n = 101^{145} mod 391 = 288.</p><p>Verify: s^e mod n = 288^{17} mod 391 = 101 = m =&gt; OK.</p>
+<div><cite><b>Dave</b> | Moderator - Sun, Oct  3 2010 16:48 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Since e is a small prime -
+ * gcd(e, any large number) = mostly 1 and sometimes e, so
+ * p is OK if ((p mod e) != 1), and
+ * q is OK if ((q mod e) != 1)</p><p>So, there is no use checking for gcd(e,p-1)==1 and gcd(e,q-1)==1. These checks will always pass if p and q are OK.</p><p>For small prime e, 
+ * computing (p mod e) is faster than gcd(e, p-1)
+ * computing (q mod e) is faster than gcd(e, q-1)
+So, compare former != 1 instead of latter == 1</p>
+<div><cite><b>Vishal</b> |  - Sun, Oct 10 2010 00:49 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Correct and a nice explanation. See Note 2 (Notes on practical applications) above.</p><pre><a href="http://www.di-mgt.com.au/rsa_alg.html#note2">http://www.di-mgt.com.au/rsa_alg.html#note2</a>
+</pre><p>e does not have to be prime, but usually is.</p>
+<div><cite><b>Dave</b> | Moderator - Sun, Oct 10 2010 03:25 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Hello,</p><p>I have a problem with me which is similar to the RSA implementation with CRT, but not exactly the same.</p><p>The encryption process is C = M^e mod N, N = p*q
+Public key (N,e) is published on a server.</p><p>The decryption process however works on a different basis.</p><p>1. to get back the plain text one uses -</p><p>      M1 = ((C mod p)^(d mod(p-1))) mod p</p><p>      M2 = ((C mod q)^(d mod(q-1))) mod q  </p><p>2. Calculate 2 constants</p><p>      A  = q^(p-1) mod N</p><p>      B  = p^(q-1) mod N  </p><p>3. Calculate the coefficients </p><p>      SH1 = (M1*A) mod N</p><p>      SH2 = (M2*B) mod N  
+  </p><p>4. The final message is got back as follows -</p><p>      M = SH1 + SH2, However id M&gt;=N then M = M - N  .</p><p>But this process has a fatal vulnerability, where if one were to change the method of calculating M2 and instead calculates a M2' such that M2' !=  ((C mod q)^(d mod(q-1))) mod q one can use it to find the keys.</p><p>Can someone of you help me in identifying the vulnerability and the ways to exploit it.</p><p>By the way, this process is followed in embedded devices.</p>
+<div><cite><b>Nishant</b> |  - Sun, Nov 14 2010 02:18 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Nishant 
+I can see you are putting a lot of effort for CSE565 project. All the best. Will be waiting for your paper tomorrow.</p>
+<div><cite><b>Ameya</b> | Buffalo - Mon, Nov 15 2010 19:36 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Solve the problem that is(1.  N = 851; r = 5, encrypt 24, decrypt 111.</p><p>2.  N = 247; r = 7, encrypt 100, decrypt 120 )</p>
+<div><cite><b>Avijeet Singh</b> | Roorkee - Wed, Nov 17 2010 10:41 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>@Avijeet: There is enough information on this page to do that.</p>
+<div><cite><b>Dave</b> | Moderator - Thu, Nov 18 2010 03:49 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>thanks..it is very helpful 4 me</p>
+<div><cite><b>jisha</b> | coimbatore - Fri, Jan  7 2011 10:31 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Hey very usefull stuff. It helped me a lot with my thesis. You should put a donation link!</p>
+<div><cite><b>dirtybit</b> |  - Tue, Jan 11 2011 09:29 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>can u please explain it for a very large value
+(about 1024bits) of P &amp; Q.</p>
+<div><cite><b>premkumar</b> | mysore - Thu, Jan 20 2011 18:23 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Nice page, learned a lot about RSA.
+I would appreciate, if someone issues some Testvectors for RSA enc/dec with different padding schemes like PKCS1_V15 or ISO14888. Can only find PKCS1-OAEP test vectors. Need to be compatible with older implementations.
+Any links available to some testvectors?</p><p>regards
+Sid</p>
+<div><cite><b>Sid</b> |  - Mon, Jan 24 2011 12:21 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>@Sid: You mean like the worked examples in PKCS#1 Schemes above?</p><pre><a href="http://www.di-mgt.com.au/rsa_alg.html#pkcs1schemes">http://www.di-mgt.com.au/rsa_alg.html#pkcs1schemes</a>
+</pre>
+<div><cite><b>Dave</b> | Moderator - Mon, Jan 24 2011 20:01 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>@Dave
+Yep! Would like to have more test vectors, especially for RSA_CRT decryption (a link would be sufficient).
+This page helped me a lot so far since two hints where  mentioned nowhere:
+1) qInv = (1/q) mod p  "where p &gt; q"
+2) h = qInv(m1 + p - m2) mod p</p><p>Now it's time to stress my code ;-)
+ 
+best regards
+Sid</p>
+<div><cite><b>Sid</b> | Germany - Tue, Jan 25 2011 05:22 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>@Sid|Germany: See our new page "Using the CRT with RSA" at <a href="http://www.di-mgt.com.au/crt_rsa.html">http://www.di-mgt.com.au/crt_rsa.html</a>.</p>
+<div><cite><b>Dave</b> | Moderator - Mon, Feb 21 2011 14:13 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>THANK YOU! Tried for seven hours to make this work, and thanks to this article it finally did! 
+It says in the simple-example that this was the smallest possible modulus n for RSA to work - could this be the reason why i couldnt succeed with p=3 &amp; q=5 ?</p>
+<div><cite><b>rcn</b> |  - Tue, Feb  1 2011 20:09 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>@rcn: see the comment from Simon dated 11 Sep 2010 above and the responses.</p>
+<div><cite><b>Dave</b> | Moderator - Tue, Feb  1 2011 22:21 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Could u please write me the algorithm structure, round, key size, key type and created by whhom - all this for RSA. I would appreciate, if u answer by today, coz tomorrow I have to submit one work. thank u!</p>
+<div><cite><b>Altay</b> | Malaysia - Sat, Feb  5 2011 04:45 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Altay: what institution are you studying at? What is the email address for your tutor?</p>
+<div><cite><b>Dave</b> | Moderator - Sun, Feb  6 2011 12:54 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>After reading through the above article I have the most basic understanding of all this but I do have a question which in comparison to what I read above should be simple for someone here to answer.  Given two public keys of 221 and 11, what is the smallest possible integer private decoding key?</p><p>Cheers,</p>
+<div><cite><b>John</b> | Kingston - Tue, Feb  8 2011 01:42 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>John: Try 53!</p>
+<div><cite><b>Dave</b> | Moderator - Tue, Feb  8 2011 18:24 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>It turned out to be 35 was the correct answer but thanks for replying.</p>
+<div><cite><b>John</b> | Kingston - Sun, Feb 20 2011 06:51 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>John: so it is! We have e=11, n=221=13x17, so phi=12x16=192 and d = (1/e) mod phi = 11^{-1} mod 192 = 35 since ed = 11x35 = 2x192 + 1.</p>
+<div><cite><b>Dave</b> | Moderator - Mon, Feb 21 2011 22:03 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>thank you for this tutorial. It's a huge help :-)</p>
+<div><cite><b>soumik</b> |  - Tue, Feb 22 2011 02:35 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>its very usefull for students to do their project and clarify their doubts</p>
+<div><cite><b>divya</b> | thrichy - Tue, Mar  1 2011 10:49 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>it is very useful for the students to do project</p>
+<div><cite><b>geet</b> | lucknow - Mon, Mar  7 2011 10:11 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>about the potential vulnerabilty</p><p>h = qInv(m1 + p - m2) mod p</p><p>since m1 is computed mod p, and m2 is computed mod q, your suggestion is not sufficient if q &gt; p</p><p>e.g. choose m1 = 1 and m2 = q-1 (2 extreme valid values)
+  m1 + p - m2 = p - q and would still be "negative"</p><p>(the suggestion would not correct the problem of large number package already suffering from unsupported negative values)</p>
+<div><cite><b>Pierre</b> |  - Tue, Mar  8 2011 03:15 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Pierre: That is why it is a requirement that p &gt; q.</p>
+<div><cite><b>Dave</b> | Moderator - Thu, Mar 10 2011 01:41 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>After having generated n, e and d, is it possible to swap the usage of d and e? Can I use (n, d) for encryption and use (n, e) for decryption? I know this is done when digitally signing, but can I use this for regular encryption/decryption without weakening the security of the algorithms?</p><p>The reason I ask is because I have an application where I need the decryption keys to be as small as possible (there are lots of decryption keys that need to be transferred and stored in a small space). Since e is usually chosen as 65537 but both n and d are large, I would much prefer to use d for encryption and e for decryption. Is this possible?</p>
+<div><cite><b>Mats</b> | Uppsala, Sweden - Wed, Mar 16 2011 19:30 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Mats: Any attempt to reduce the size of the private exponent d reduces security. Your suggestion completely removes it!</p>
+<div><cite><b>Dave</b> | Moderator - Wed, Mar 16 2011 23:23 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Great article, saved me quite a bit of time. 
+A quick suggestion: set the test vector bytes to show up as 0x00, 0x01 type of notation -- I used some for tests and parsing bytes out was a bit of a pain. If you were to use the same keys throughout the article it would be much easier for those of us that ended up here looking for control tests :)</p><p>As a side note: with an implementation of Fast Hartley transformation for multiplication, CRT became more expensive than a the straight up method. I just tested both and CRT is running about 1.7x slower. </p><p>P.S. I loved your reply to Altay :)</p>
+<div><cite><b>Arthur</b> | NJ - Thu, Mar 24 2011 16:26 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>its much good also &amp; very nice_ly explain</p>
+<div><cite><b>Vinay</b> |  - Fri, Mar 25 2011 04:48 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Who wrote this? I'd like to use it as a reference :-) Thank you.</p>
+<div><cite><b>Joe</b> |  - Tue, Mar 29 2011 17:10 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>See above:
+<a href="http://www.di-mgt.com.au/rsa_alg.html#theauthor">http://www.di-mgt.com.au/rsa_alg.html#theauthor</a></p>
+<div><cite><b>Dave</b> | Moderator - Wed, Mar 30 2011 00:06 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Very good article!</p>
+<div><cite><b>Igor</b> |  - Fri, Apr  1 2011 07:43 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Hi Dave- I've been using your awesome tutorial to create my own RSA implementation. I've noticed that it is not stable- encrypting a message _m_ into ciphertext _c_ then decrypting _c_ does not always result in _m_. I think the problem has to do with messages larger than the modulus (n).</p><p>I've noticed that the problem happens with your example keys. You provided e: 3, d: 7, n: 33. This works great for low numbers (less than 33):</p><p>m = 31,
+c = 31^3 (mod 33) = 25,
+decrypted_message = 25^7 (mod 33) = 31</p><p>Our decrypted_message == our original message, so that works.</p><p>m = 33,
+c = 33^3 (mod 33) = 0,
+decrypted_message = 0^7 (mod 33) = 0</p><p>Decrypted_message (0) does not equal original message (33). Something failed. </p><p>The algorithm seems to fail for any message that is greater than or equal to the modulus. I'm not sure if this is by design or not, but I can not find any reference to this requirement in your tutorial or in other references. Can you help me figure out what I am doing wrong?</p>
+<div><cite><b>Topher</b> | Rhode Island, USA - Thu, Apr  7 2011 16:16 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Topher: As you have found, the algorithm only works for m &lt; n. That is by the mathematics of the algorithm. See <a href="http://www.di-mgt.com.au/rsa_alg.html#note4">#note4</a> above.</p>
+<div><cite><b>Dave</b> | Moderator - Tue, Apr 12 2011 00:08 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Thanks Dave- now that you say that, m &lt; n is brutally obvious from my own experiments, intuition, and every reference I have in front of me. Not sure how I missed it the first time, but thanks for the clarification!</p>
+<div><cite><b>Topher</b> | Rhode Island, USA - Fri, Apr 15 2011 17:25 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Thank you very much!It is a nice article.This is very useful for my design of graduation about the RSA algorithm.</p>
+<div><cite><b>forevercuit</b> | China Chengdu - Wed, Apr 20 2011 06:58 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>its very helpful in understanding lets see can it be helpful in programming.......</p>
+<div><cite><b>t a</b> | Pakistan - Thu, May  5 2011 14:46 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>This is an Awesome article about RSA
+:D
+thanks a ton</p>
+<div><cite><b>euronymus</b> |  - Sat, May  7 2011 04:59 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>can you help me in this question - http://math.stackexchange.com/questions/37604/breaking-rsa-in-a-special-case</p>
+<div><cite><b>Nitin</b> |  - Sat, May  7 2011 12:12 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Nitin: Sorry, we don't help people do their homework.</p>
+<div><cite><b>Dave</b> | Moderator - Sat, May  7 2011 22:15 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Congratulations, very good document about RSA. 
+New topics to be included in the next version of this electronic book: http://www.criptored.upm.es/guiateoria/gt_m001a_en.htm (RSA and others in chapter 14). 
+You can use this freeware for RSA labs: http://www.criptored.upm.es/software/sw_m001d.htm (so sorry, english version is not available). 
+Regards. Good work! 
+Jorge Rami󬠔echnical University of Madrid, Spain, cryptography professor.</p>
+<div><cite><b>Jorge Rami</b> | Madrid, Spain - Thu, May 12 2011 10:50 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Excellent tutorial.  My question is if we know n (public) and we know n is the product of two primes, we can find the two primes (p and q as demonstrated by "145" on the Sun Oct 3 2010 post) and then knowing p and q we (public) easily calculate the totient, (p-1)x(q-1).  Since e is also public and now the public has p and q it seems to me anyone can now compute the key, d=e^-1 (mod totient).  Where is the secret here (I know there is one but I am not seeing it).</p>
+<div><cite><b>MDJ</b> |  - Fri, May 13 2011 01:31 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>MDJ: RSA only provides security when n is a *very* large number, in the order of hundreds of digits long. There is no known easy way to factorize a large number like we could with a small number like 391, where we just used a brute-force trial of all smaller primes. Even with the fastest computer and latest known factorization algorithms, it would still take centuries to find the factors p and q for a 1024-bit value of n.</p>
+<div><cite><b>Dave</b> | Moderator - Sat, May 14 2011 02:45 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>The Formula is wrong in many books...
+The actual formula is ::</p><p>e*d mod z or phi = 1</p>
+<div><cite><b>CoolYo</b> |  - Fri, Jun  3 2011 04:10 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>And what would z be, CoolYo?</p>
+<div><cite><b>Dave</b> | Moderator - Sun, Jun  5 2011 08:28 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Hello thanks 4a gr8 content but can u tell me how can we limit the output size generated from this in rsa.for instance if i have a number as input of 10bit length and i want the crypted code being generated also of not more than 10bits in size than can i do this by limiting the values of p,q and e.if so,plz explain i will be highly obliged.</p>
+<div><cite><b>Himanshu</b> | India - Tue, Jun  7 2011 13:26 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>How do you implement d=(1/e) mod Phi in C/C++?</p>
+<div><cite><b>Abe</b> | India - Fri, Jul  1 2011 09:23 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Abe: See the bdModInv and mpModInv functions in the BigDigits package</p><pre><a href="http://www.di-mgt.com.au/bigdigits.html">http://www.di-mgt.com.au/bigdigits.html</a>
+</pre>
+<div><cite><b>Dave</b> | Moderator - Sat, Jul  2 2011 06:36 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Thanks a lot for your information, I am working on my master thesis. I was trying combine a symmetric and asymmetric encryption algorithm for improving Cloud security, however, your document show me that isn't a new idea. Do you have any suggestion for me?
+Best regards,
+HR</p>
+<div><cite><b>Hossein</b> | Malaysia - Tue, Jul  5 2011 05:55 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Thanks for the excellent explanation of the PKCS#1 schemes. I've used your explanation to write Python code for my pure-Python RSA implementation at [xxxx]</p>
+<div><cite><b>Sybren A. Stvel</b> | Amsterdam, The Netherlands - Sun, Jul 10 2011 12:19 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Sybren: Thanks for the back link to us on your page!</p>
+<div><cite><b>Dave</b> | Moderator - Tue, Jul 12 2011 00:20 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>I am a teacher from India. I appreciate the clarity and precision of this article. I learnt RSA and also learnt how to teach RSA, from this article. My grateful thnaks to the author.</p><p>partha</p>
+<div><cite><b>Parthasarathy</b> | Secunderabad, India - Thu, Aug 25 2011 02:26 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Give a sample code in RSA encryption.....</p>
+<div><cite><b>vicente</b> |  - Tue, Oct  4 2011 04:25 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Vicente: Please see the section "Implementation in C and VB6" above</p><pre><a href="http://www.di-mgt.com.au/rsa_alg.html#implementation">http://www.di-mgt.com.au/rsa_alg.html#implementation</a>
+</pre>
+<div><cite><b>Dave</b> | Moderator - Tue, Oct  4 2011 12:13 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Thanks!  Here's a typo:
+m = StringToInteger("8003EA", 3) = 8389354
+should be 
+m = StringToInteger("8002EA", 3) = 8389354</p>
+<div><cite><b>iYak</b> |  - Tue, Nov 29 2011 20:27 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>iYak: Well spotted and thanks. It's fixed now.</p>
+<div><cite><b>Dave</b> | Moderator - Wed, Nov 30 2011 07:53 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>I'm working in c code, and I've got everything working except for the part about splitting up the string into sets of three numbers and adding the numbers.</p><p>Also, how do we undo the multiplication/ addition of the three numbers, it makes sense if it was with powers of ten, but not with powers of 26</p>
+<div><cite><b>Jeff</b> |  - Mon, Dec  5 2011 20:48 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Jeff: To split up a number into powers of 26, just keep dividing by 26 and keep the remainder. For example</p><pre>14313 divided by 26 = 550 remainder 13
+550 divided by 26   = 21 remainder 4
+21 divided by 26    = 0 remainder 21
+</pre><p>so our plaintext characters are 21 -&gt; 'V', 4 -&gt; 'E' and 13 -&gt; 'N'</p>
+<div><cite><b>Dave</b> | Moderator - Tue, Dec  6 2011 22:40 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>its an awesome tutorial for me....as i study it further....thanx...very much.</p>
+<div><cite><b>kuldeep</b> | india - Sat, Dec 10 2011 21:44 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Hi all,
+first this is a very nice tutorial. But I've got a (maybe stupid) question:
+Why is the key in ssl/openssl always represented like this:
+MIICXAIBAAKBgQDJFwAwCnWKiH8 ... = 
+There around 1588 ascii-symbols for 2048-Bit.
+Why not 256 -ASCII-Character for 2048Bit / 8Bit/char?</p>
+<div><cite><b>rsaDummy</b> |  - Tue, Jan 17 2012 16:25 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>rsaDummy: That string MIICX... is a base64 encoding of the RSA key stored as an ASN.1 object using DER encoding!!!</p><p>A public RSA key has two parts, the modulus n which is 256 bytes long for a 2048-bit key, and the exponent e, which is usually only 3 bytes long. For the private key you need to add the private modulus d (also 256 bytes long) plus p, q, dP, dQ and qInv (see CRT above), all of which are 128 bytes long. So a 2048-bit key has components that take 256+3+256+(5*128) = 1155 bytes.</p><p>ASN.1 (Abstract Syntax Notation One) is a notation that allows you to define complex data types like all the components of an RSA key in a unique way. Distinguished Encoding Rules (DER) encoding is a specific way to represent an ASN.1 type as a sequence of bytes that can be read across different systems. </p><p>The DER encoding will add about 36 more bytes of overhead to the raw n, e, d, p, q, ... etc values in the key, so we'll end with about 1191 bytes to represent the key in binary DER format.</p><p>This binary form is not very computer friendly, so we encode again in base64 which only uses printable characters (like MIICX...). This expands again where every 3 bytes in binary form become 4 ASCII characters in base64, so the 1191 bytes become 1191*4/3 = 1588 ASCII characters</p><p>So that's how we get from the 256 bytes of the modulus for a 2048-bit RSA key to a 1588-character string in OpenSSL.</p>
+<div><cite><b>Dave</b> | Moderator - Tue, Jan 17 2012 22:23 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Thanks for an excellent article.  At http://www.di-mgt.com.au/rsa_alg.html#stringvsinteger, pq = 25009997.  p, q, therefore = 4999, 5003.  phi(pq) 4998*5002 = 24999996.  The chosen encryption key e, 3, is not valid because gcd(3, 24999996) = 3, not 1 (5 or 11 would work).  Since 3 has no modular inverse mod 24999996, there's no decryption key!</p>
+<div><cite><b>doctorjay</b> | Sudbury, MA, US - Thu, Jan 26 2012 22:50 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Thanks, doctorjay. We should be more careful in checking! We've changed the public exponent to 5.</p>
+<div><cite><b>Dave</b> | Moderator - Fri, Jan 27 2012 01:09 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>really nice stuff. I got clear of my doubts on encryption and used it for my project. thakzzzzz</p>
+<div><cite><b>Nathiya</b> | tamilnadu - Sun, Jan 29 2012 12:45 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Recipient: Bob
+Key Encryption Algorithm: rsaEncryption
+Encrypted Key:
+3D2AB25B1EB667A40F504CC4D778EC399A899C8790EDECEF062CD739492C9CE5
+8B92B9ECF32AF4AAC7A61EAEC346449891F49A722378E008EFF0B0A8DBC6E621
+EDC90CEC64CF34C640F5B36C48EE9322808AF8F4A0212B28715C76F3CB99AC7E
+609787ADCE055839829E0142C44B676D218111FFE69F9D41424E177CBA3A435B
+Content Encryption Algorithm: aes128-cbc
+IV: 5732164B3ABB6C4969ABA381C1CA75BA
+Encrypted Content:
+67290EF00818827C777929A56BC3305B</p><p>This bit really helped me with my skills. thanks :)</p>
+<div><cite><b>Alex</b> | Gold coast - Thu, Feb  2 2012 00:14 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Very interesting and clear article.</p><p>I try to play the examples with the Bigdigit library but I encountered a problem with the "Encryption using PKCS#1v1.5".</p><p>I take your n = A9E167...A7EBh, e = 11h and d = 67CD484C9A0...B0319h. I try to encrypt a message m = 499602d2h = 1234567890 and get m' = m^e mod n. Then to decrypt</p><p>m'' = m'^d mod n. but I don't get m' = m''. </p><p>m := 1234567890 = 499602d2h</p><p>m' := 2ae7e7c1be3e7af94edfd2c4cc6147601b9c396c67e475b750513e9f642b790ac8cd782f39ea166abc7734cca9a925d0b9bae0bc7d85d9ef2ad7fbf18b3d20000h</p><p>m'' := 306a34cd9c6fb196b22cdb0ac85785aa7c368e287c651030728b80827389869264c17b73fca773513ef90253c41649d6c581040b523bbc76661d5bb097e223b
+3459cedd04a107dcd34f764866dd0e8c5be236b678e7a38b16a619d9052d1cb495b79a4f13aed021b9fd67bea5ac6357631152e9e5204e13ae91ace51ded237c1h</p><p>Do I make an error or is there a problem with the value that you give to d. I remark that n and e are the same (but in hexa in this second example) than in a previous example "A real example" but d is different. So I suppose that take the same q and p.</p><p>Do I miss something ?</p><p>Thank for your answer.</p>
+<div><cite><b>Thierry</b> | France - Thu, Feb  9 2012 21:19 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Thierry: The value of e we used was 0x10001, not 0x11, so the value of d will not be the same. </p><p>Plus, the whole point of PKCS#1v1.5 is that a short message of a few bytes is encoded in a larger 1024-bit block before encrypting with RSA.</p>
+<div><cite><b>Dave</b> | Moderator - Fri, Feb 10 2012 07:42 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Thanks for the algorithm.</p><p>I used it for a prototype running in a smt32 mcu and it work flawlessly.</p>
+<div><cite><b>Brisa</b> | Monterrey, Mxico - Sat, Feb 18 2012 07:10 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>can anyone help me to solve this problem......</p><p>Imagine that Fred sees your RSA signature on m1 and m2, (i.e., he sees (m1d mod n) and (m2d mod n)).
+How does he compute the signature on each of m1j mod n (for positive integer j), m1-1 mod n, m1 x m2 mod n, and in general m1j m2k mod n (for arbitrary j and k)?</p>
+<div><cite><b>sonia</b> | surrey,canada - Tue, Feb 21 2012 03:00 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Sonia: Good luck with your assignment.</p>
+<div><cite><b>Dave</b> | Moderator - Tue, Feb 21 2012 23:06 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Great blog.</p>
+<div><cite><b>santa</b> |  - Wed, Feb 22 2012 06:40 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>nice ....</p>
+<div><cite><b>vinay kasireddi</b> |  - Wed, Feb 29 2012 11:14 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Hi this is a very useful site. Its amazing to use Bigdigit library and your information about solving big modulus problem.
+ I have done a program of RSA cube root attack using bigdigit library and i got correct output as well
+ o/p= 4461732066756572206d6f7267656e206665737467656c65677465204d656574696e67206d75737320756e626564696e677420737461747466696e64656e21
+ now i have to convert this hex value in Char to show plaintext but i am not getting how to use this bigdigit value to convert it into the char string of plaintext</p>
+<div><cite><b>Govind</b> |  - Wed, Mar 14 2012 03:32 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Is it for real ! can I use RSA with Very Large Numbers on pic microcontroller I thought that it would take centuries</p>
+<div><cite><b>Usama</b> |  - Tue, Mar 27 2012 12:49 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Usama: Most certainly you can use RSA on a microcontroller - and in a reasonable timeframe measured in milliseconds. It only takes centuries to crack (i.e. factorize) the key.</p>
+<div><cite><b>Dave</b> | Moderator - Wed, Mar 28 2012 20:34 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Dave: I hope you are still following it. I have a little confusion. I am taking up a cryptography course. My biggest confusion is what exactly is known to the parties (Alice and Bob)?
+In your article you have written that n, p, q are known to Bob.
+If this is so, can't Bob find Alice's private key da from Alice's public key ea using (ea)^-1 mod phi = (ea)^(phi-1) mod phi?
+Secondly we cannot say that for a key e there exist only one inverse d mod phi (because there will be one mod lcm(p-1,q-1) as well.</p>
+<div><cite><b>Aamer</b> | Pakistan - Sat, Apr 21 2012 13:10 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Aamer: Re what is secret and what is public:
+See <a href="http://www.di-mgt.com.au/rsa_alg.html#keygen">http://www.di-mgt.com.au/rsa_alg.html#keygen</a> above:</p><pre>The public key is (n, e) and the private key (d, p, q).
+Keep all the values d, p, q and phi secret.
+</pre><p>Re different values of d: See <a href="http://www.di-mgt.com.au/rsa_alg.html#note6">http://www.di-mgt.com.au/rsa_alg.html#note6</a> above and also our RSA Theory page <a href="http://www.di-mgt.com.au/rsa_theory.html">http://www.di-mgt.com.au/rsa_theory.html</a> Using lambda(n) instead of phi(n). There is actually an infinite number of secret exponents.</p>
+<div><cite><b>Dave</b> | Moderator - Mon, Apr 23 2012 01:43 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Between sorry for me being mean. The article is splendidly written, well structured and rich in content.
+Thanks for putting in all the effort.</p>
+<div><cite><b>Aamer</b> | Pakistan - Sat, Apr 21 2012 13:15 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Just found out that N is different for different users!
+http://www.ams.org/notices/199902/boneh.pdf
+Thanks for the article though.
+But I feel either most of the texts on RSA forget to highlight this or perhaps there is a problem with my understanding.
+I asked many other students and they also could not answer. This might mean the texts should highlight this.
+Regards</p>
+<div><cite><b>Aamer</b> | Pakistan - Sat, Apr 21 2012 14:11 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Great! Extremely clear, congratulations for ordering things in a growing level of  complexity!</p>
+<div><cite><b>VirgilioBF</b> | Brasil - Sun, May 13 2012 18:28 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Should I use RSA-PSS instead of PKCS#1v1.5? You said:"PSS is not used in practice very much ". Just Because There are no currently weaknesses with the PKCS#1v1.5 signature scheme. 
+Thanks</p>
+<div><cite><b>Truong</b> |  - Tue, May 22 2012 16:51 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Truong: Nothing stops you using RSA-PSS if you and the recipient of the signature agree. We've never seen it used in practice and we doubt whether many mainstream applications would accept it. We'd never include PSS in any of our products because there is still an active patent associated with it.</p>
+<div><cite><b>Dave</b> | Moderator - Tue, May 22 2012 21:47 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>I have a question . In order to create public key, we must get p, q first by doing random. If there are two same public key (It mean that both p and q of two public key are the same). 
+And the trouble is If I know the person who have the public key like I have. I can calculate his private key. And there is no-secure in this case.</p>
+<div><cite><b>JohnVan</b> |  - Thu, May 24 2012 15:40 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>JohnVan: What you say is true: if you just happen to have the same n as someone else, then you know their private key. But what are the odds of that in practice? </p><p>For a typical RSA key of 1024 bits, p and q will be about 512 bits long. So p and q are each of the order of 10 to the power 154. That's 10 followed by another 154 zeros. About 3 in 1000 of these will be prime. Now assume a decent random number generator and work out the probability of getting the same p and q as someone else.</p>
+<div><cite><b>Dave</b> | Moderator - Thu, May 24 2012 20:51 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Thanks Dave</p>
+<div><cite><b>JohnVan</b> |  - Sat, May 26 2012 02:28 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Hi Dave, 
+Do you know why p must be large then q when using CRT?</p>
+<div><cite><b>Joe</b> |  - Sat, Aug  4 2012 10:38 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Joe: See the comment by Pierre on Tue, Mar 8 2011 and the response.</p>
+<div><cite><b>Dave</b> | Moderator - Sun, Aug  5 2012 00:25 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Hi... One of my project requirement is to implement RSA encryption and decryption algorithm with ISO 14888 padding scheme. Can anyone provide information about ISO 14888 padding scheme ??</p>
+<div><cite><b>Sha</b> |  - Sat, Aug 18 2012 10:37 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Sha: I think it's the same as PKCS#1, but you never know with these ISO-$$$$-standards without paying the dollars for a copy or finding an old draft version that someone's left around.</p>
+<div><cite><b>Dave</b> | Moderator - Sun, Aug 19 2012 10:17 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Thanks for the reply Dave.... </p><p>I searched in internet but no where i am able to get information on ISO 14888 padding scheme. </p><p>Is it possible to decode the ISO 14888 padding scheme with the following information....</p><p>All values of the RSA operation are in Hex format.</p><p>Msg : 000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F</p><p>D ( Private Exponent )  : 9E0FA834765B7ECC894DA54327477EA7C8F11158A4F93D1DF87974F9452FD6CCC8EFF40AA66023805A51C2000381C24DE1DD84C5CB9B1B86BDC208BF6AEE3F51</p><p>E ( Public Exponent )  : 010001</p><p>M ( Modulus )  : d1392979475142eee4205c3f3fcaeb29ff99e1fd1094d72751ef5e5c888787e8895d4407ed72530ec7c4440c9fa29f10a16e068a2dde209ad30ccff4a5f78f3b</p><p>Cipher ( Encrypted Data ) : 5EECE83BBD3108B2AC9C81A69308598CA8EEE73DB3340316886312120BD41CF1DAB654FEAA556EB4D0EFCBC7AEF6338F6EB685832AB29664FB3EB9234F9325E0</p><p>Decrypted Data ( Encoded message ): 00024ae71336e44bf9bf79d2752e234818a524311d9abc4077123c2c9a167a00000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f</p>
+<div><cite><b>Sha</b> |  - Mon, Aug 20 2012 09:07 GMT</cite></div>
+</blockquote>
+
+
+<blockquote class="reply">
+<p>Sha: It looks like PKCS#1v1.5 to me. See "Encryption using PKCS#1v1.5"
+<a href="http://www.di-mgt.com.au/rsa_alg.html#encryptpkcs1">http://www.di-mgt.com.au/rsa_alg.html#encryptpkcs1</a> above. The encoded message you give breaks down as follows</p><pre>00 02
+4ae71336e44bf9bf79d2752e234818a524311d9abc4077123c2c9a167a
+00
+000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
+</pre><p>with the actual message being the 32 bytes 00 01 02 ... 1e 1f.</p><p>IEEE P1363a/D12 hints that ISO/IEC 14888-3:1998 and PKCS #1 v2.1 may be compatible, but that's for digital signatures. I can't see anything where ISO 14888 is used for encryption. In fact, the description on the ISO site says "ISO/IEC 14888 specifies digital signatures with appendix". Who is asking you to do this?</p>
+<div><cite><b>Dave</b> | Moderator - Tue, Aug 21 2012 11:12 GMT</cite></div>
+</blockquote>
+
+
+<blockquote>
+<p>Hi from Ottawa, Canada.  Just wanted to say thank-you for the high quality
+wealth of information on RSA - very readable, digestible and usable.  I
+have referenced you in a research paper on Zero Knowledge protocols.  Focus
+is on RSA feasibility in three-pass scenario (no exchange of keys, instead
+using principle d(B.pri,d(A.pri,(e(B.pub,(e(A.pub,m))))= m.</p><p>Thanks,
+  Karim</p>
+<div><cite><b>Karim Sultan</b> |  - Mon, Apr  1 2013 01:18 GMT</cite></div>
+</blockquote>
+
+
+<!-- END COMMENTS-CONTENT -->
+</div>
+<div><a id="end_of_comments"></a>
+
+	[Go to <a href="http://www.di-mgt.com.au/rsa_alg.html#makeacomment">first comment</a>]
+</div>
+
+</div> <!-- END BODY-BLOCK -->
+
+<!-- BEGIN FOOTER-BLOCK -->
+<!-- Page footer - Rule, Copyright and Text-style Links -->
+<hr class="noshow">
+<div id="footerblock" class="w-footer">
+<!-- Show off WC3 logo -->
+<div id="w3c" class="f-w3c">
+<!-- IMPORTANT: check these $CUSTOM$ links! -->
+<a href="http://validator.w3.org/check?uri=www.di-mgt.com.au/rsa_alg.html"><!-- $CUSTOM$ -->
+<img width="64" height="64" alt="HTML5 Powered" src="./RSA Algorithm_files/HTML5_Logo_64.png"></a>
+                          <a href="http://www.di-mgt.com.au/rsa_alg.html"><!-- $CUSTOM$ -->
+<img width="64" height="64" alt="reload" src="./RSA Algorithm_files/reload64.png"></a>
+</div>
+<!-- end of WC3 logo -->
+
+
+<div class="f-copyright">
+	Copyright © 2002-16 DI Management Services Pty Limited 
+	ABN&nbsp;78&nbsp;083&nbsp;210&nbsp;584
+	Australia.<br>
+
+	<a class="links" href="http://www.di-mgt.com.au/">
+<b>www.di-mgt.com.au</b></a>.
+	All rights reserved.
+</div>                                             
+<!-- Text-style links -->
+<p class="footer-links">
+
+	<a class="links" href="http://www.di-mgt.com.au/index.html">Home</a> |
+
+	<a class="links" href="http://www.di-mgt.com.au/services.html">Services</a> |
+	<a class="links" href="http://www.di-mgt.com.au/profile.html">About Us</a> |
+	<a class="links" href="http://www.di-mgt.com.au/projects.html">Projects</a> |
+	<a class="links" href="http://www.di-mgt.com.au/links.html">Links</a> |
+	<a class="links" href="http://www.di-mgt.com.au/crypto.html">Cryptography</a> |
+	<a class="links" href="http://www.cryptosys.net/">CryptoSys API</a> |
+	<a class="links" href="http://www.cryptosys.net/pki/">CryptoSys PKI</a> |
+	<a class="links" href="http://www.di-mgt.com.au/dbxanalyzer/index.html">DBXanalyzer</a> |
+	<a class="links" href="http://www.di-mgt.com.au/bigdigits.html"> BigDigits</a> |
+	<a class="links" href="http://www.di-mgt.com.au/wclock/index.html">Wclock</a> |
+	<a class="links" href="http://www.di-mgt.com.au/sudoku.html">Su Doku</a> |
+	<a class="links" href="http://www.di-mgt.com.au/site.html">About This Site</a> |
+	<a class="links" href="http://www.di-mgt.com.au/contact.html">Contact</a> |
+	<a class="links" href="http://www.di-mgt.com.au/contactmsg.php">Email Us</a>
+</p>
+</div> <!-- END FOOTER-BLOCK -->
+
+
+
+</body></html>

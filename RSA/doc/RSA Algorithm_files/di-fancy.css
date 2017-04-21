@@ -1,0 +1,160 @@
+/* di-fancy.css */
+
+/* Turn back on stuff turned off in basic.css */
+#menu, #w3c, #other, #clustr, #logo, #crumbs, #contents-box {
+	display:block; /* fallback */
+	/*display : initial;*/
+}
+
+#homeicon {
+	display: none;
+}
+
+a:hover, a:focus { color: blue ; text-decoration : underline; background : yellow; }
+a.side:link {color: white; background: transparent; text-decoration: none}
+a.side:visited {color: white; background: transparent; text-decoration: none}
+a.side:hover, a.side:focus {color: white; background: transparent; font-weight : bold; text-decoration: underline overline}
+a.side:active {color: white; background: transparent; text-decoration: none}
+
+/* Used with left-navigation menu */
+.side {
+	font-size: 11px;
+	color: #ffffff;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-weight: bold;
+	background: #006699;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	padding: 3px;
+}
+.l-body-text {
+/* MAIN TEXT IN PAGE WITH LEFT MENU */
+	padding: 6px; 
+	margin: 0px 5% 0px 125px; 
+}
+.l-left-menu {
+	left: 6px; 
+	width: 110px; 
+	position: absolute; 
+	top: 90px
+}
+.n-left-nav {
+	left: 6px; 
+	width: 110px; 
+	position: fixed; 
+	top: 60px
+}
+.l-footer {	/* font,padding in basic.css */
+	margin: 10px 5% 0 125px; 
+}
+/* Across the whole page */
+.t-header {
+	position: static;
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0 5% 5px 0;
+	padding: 1px;
+	border-top: 1px solid #006699; 
+	border-bottom: 3px solid #006699;
+}
+.w-body-text {
+/* MAIN TEXT IN PAGE WITH NO SIDE MENU */
+	padding: 6px; 
+	margin: 0 5% 0 0;
+}
+.w-footer {	/* font,padding in basic.css */
+	margin: 10px 5% 0 0; 
+}
+.l-logo {
+	float:left;
+	margin-right:10px;
+	border: none;
+}
+.r-logo {
+	float:right;
+	padding: 0 0px 20px 20px;
+	border: none;
+}
+/* In the header */
+.h-logo {
+	float:right;
+	left:2%;
+	padding:3px;
+}
+.h-search {
+	float:right; 
+	padding:5px;
+	font-size: 0.875em;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.h-crumbs {
+	text-align:left;
+	left:10px;
+	padding:10px;
+	/* width:55%; */
+	font-size: 0.875em;
+	font-family: Arial, Helvetica, sans-serif;
+}
+/* Two columns */
+#leftcolumn {
+	float:left;
+	left:2%;
+	width:45%;
+	top:50px;
+	border-left: 1px dotted #000;
+	border-right: 1px dotted #000;
+	padding: 1px 10px
+}
+#rightcolumn {
+	float:left;
+	left:50%;
+	width:45%;
+	top:50px;
+	border-right: 1px dotted #000;
+	padding: 1px 10px
+}
+/* In the footer */
+.footer-gen {
+	width: 100%; 
+	margin-top: 10px; 
+	padding-top: 5px; 
+	border-top: 3px solid #069;
+}
+.f-w3c {
+	float:left;width:190px;
+}
+.f-copyright {	/* font,padding in basic.css */
+	margin-left:200px;
+}
+.footer-links {	/* font,etc in basic.css */
+	clear:both;
+}
+
+/* font,padding in basic.css for the following... */
+div.breakout {	
+	margin-right: 200px;
+}
+.commendblock {
+	width: 80%; 
+}
+.feedback {
+	width: 80%;
+}
+
+/* Clustr-map related */
+#clustr {
+	float:right;
+}
+#contents-box {
+	margin-right: 370px;
+	padding: 5px;
+	border: thin dashed #069;
+}
+
+/* Book reading stuff */
+div.book-outer {
+	float:right;
+	width:350px;
+}
+div.book-opposite {
+	margin-right: 360px;
+}

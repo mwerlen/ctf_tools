@@ -1,0 +1,444 @@
+/* di-basic.css */
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,b,i);
+#menu, #w3c, #other, #clustr, #logo, #crumbs, #contents-box {
+  display : none;
+}
+
+body {
+	color: black; 
+	background: #fffff0;	/* Ivory */
+	font-family: 'Noto Sans', Verdana, Geneva, "DejaVu Sans", "Bitstream Vera Sans", sans-serif;
+	font-size: 16px;
+	margin: 8px;
+}
+h1 {
+	font-size: 1.6em;
+	text-align: left;
+}
+h2 {
+   font-size: 1.5em;
+   font-weight: normal;
+   background:  #eef;
+   margin-left: -3pt;
+   margin-right: -3pt;
+   margin-top: 1.5em;
+   padding-left: 3pt;
+   padding-right: 3pt;
+   border-bottom: 2px solid #aaf;
+}
+h3 {
+	/* font-size: 100%; */
+	color: black;
+	background: transparent;
+	text-align: left;
+	margin-top: 1.4em;
+}
+h3.link {font-weight: normal;}
+h4 {
+	color: black;
+	background: transparent;
+	text-align: left;
+}
+p { line-height: 1.4em; }
+li { line-height: 1.4em; }
+pre {
+	background: #efefef;
+	color: black;
+	/*white-space: pre-wrap;*/
+	overflow:auto;
+	font-size: 0.875em;
+}
+code {
+	font-family: "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+}
+code.filename {
+	font-family: Consolas, "Vera sans mono", "Lucida Typewriter", monospace;
+}
+code.md {
+	padding: 1px 4px;
+	color: #d14;
+	background-color: #f7f7f9;
+	border: 1px solid #e1e1e8;
+	font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+	font-size: 12px;
+	box-sizing: border-box;
+	border-radius: 3px;	
+}
+ul.vs, ol.vs {
+	margin-bottom: 1em;
+}
+.vs li {
+	margin-bottom: inherit;
+}
+ul.vss, ol.vss {
+	margin-bottom: 0.5em;
+}
+.vss li {
+	margin-bottom: inherit;
+}
+li.vs {
+	margin-bottom: 1em;
+}
+li.vss {
+	margin-bottom: 0.5em;
+}
+ul.nomarkers {
+	list-style-type:none;
+	padding:0;
+	margin-left:1.5em;
+}
+dt {
+	font-weight: bold;
+	margin-top: 1em;
+}
+img {
+	border: 0;
+	max-width: 100%;
+}
+input, textarea {
+	max-width: 100%;
+}
+td.bleft {
+	text-align: left;
+	width: 30%;
+}
+td.smcode {
+	font-family: "Courier New", Courier, "Nimbus Mono L", monospace;
+	font-size: 0.875em;
+}
+
+table.ditable {
+	margin: 0.5em;
+	border: 1px #aaa solid;
+	border-collapse: collapse;
+}
+.ditable th, .ditable td {
+	border: 1px #aaa solid;
+	padding: 0.1em 0.5em;
+}
+.ditable th {
+	background: #ccffff;
+	text-align: center;
+	vertical-align: bottom;
+}
+.ditable td {
+	vertical-align: top;
+}	
+.ditable caption {
+	font-weight: bold;
+}
+
+table.linktable {
+	margin: 0.5em;
+	border-collapse: collapse;
+	width:100%;
+}
+.linktable td {
+	padding: 5px;
+	vertical-align: top;
+	text-align: left;
+}
+
+.smaller {
+	font-size: 0.875em;
+}
+.maplist {
+	font-size: 0.875em;
+}
+.eqn {
+	font-size: 100%;
+	font-family: "Courier New", Courier, "Nimbus Mono L", monospace;
+	text-align: left;
+}
+.tone {
+	background: #ccffff;
+	color: black;
+}
+.highlight {
+	color: red;
+	background: transparent;
+}
+.comment {
+	color: green;
+	background: transparent;
+}
+.ref {
+	color: #00cc00;
+	background: transparent;
+}
+.plainquote {
+	color: #cc0000;
+	background-color: transparent;
+}
+.quoted {
+	font-size: 0.875em; 
+	font-family: Georgia, "URW Bookman L", serif;
+}
+.contents {
+	font-size: 0.875em;
+}
+.qcontents {
+	font-size: 0.875em;
+	text-align: center;
+}
+.tm-api {
+	color: #006600;
+	font-weight: bold;
+	background: transparent;
+	font-family: "Trebuchet MS", Verdana, sans-serif;
+	font-size: 1.125em;
+}
+.tm-pki {
+	color: #cc0000;
+	font-weight: bold;
+	background: transparent;
+	font-family: "Trebuchet MS", Verdana, sans-serif;
+	font-size: 1.125em;
+}
+.fs1 {
+	color: #239e46;
+	background: transparent;
+	font-family: Helvetica, Arial, "Nimbus Sans L", sans-serif; 
+	font-weight: bold;
+	font-size: 1.125em;
+}
+.fs2 {
+	color: #be0027;
+	background: transparent;
+	font-family: Helvetica, Arial, "Nimbus Sans L", sans-serif;
+	font-weight: bold;
+	font-size: 1.125em;
+}
+.trademark {
+	color: black;
+	font-weight: bold;
+	background: transparent;
+	font-family: "Trebuchet MS", Verdana, sans-serif;
+}
+.tm-bdc {
+	color: black;
+	font-weight: normal;
+	background: transparent;
+	font-family: "Trebuchet MS", Verdana, Helvetica, sans-serif;
+	font-size: 125%;
+}
+.vbcodex {
+	background: #efefef;
+	color: black;
+	margin: 10px; 
+	padding: 5px; 
+	border: thin dashed black;
+	overflow: auto;
+}
+.codex {
+	background: #efefef;
+	color: black;
+	margin: 10px; 
+	padding: 5px; 
+	border: thin dashed black;
+	overflow: auto;
+}
+.code {
+	background: #efefef;
+	color: black;
+}
+.output {
+	background: #ffdead;
+	color: black;
+}
+.precode {
+	background: #efefef;
+	color: black;
+	font-family: "Courier New", Courier, "Nimbus Mono L", monospace;
+	font-size: 0.875em;
+}
+.input-box {
+	background: #ffff99;
+	color: black;
+}
+.u {
+	text-decoration: underline;
+}
+.sc {
+	font-variant: small-caps;
+}
+.noshow {
+	display: none;
+}
+.kw {
+	color: blue;
+	background: transparent;
+}
+
+/* Links - no hover */
+a:link {color: blue; background: transparent; text-decoration: underline}
+a:visited {color: purple; background: transparent; text-decoration: underline}
+a:active {color: #cc0000; background: transparent;}
+
+/* Weighted */
+.rank01 {
+	margin:0px;
+	font-family:Helvetica, Arial, "Nimbus Sans L", sans-serif;
+	font-size:1.5em;
+	line-height:1.6em;
+	font-weight: bold;
+}
+.rank02 {
+	margin:0px;
+	font-family:Helvetica, Arial, "Nimbus Sans L", sans-serif;
+	font-size:1.3em;
+	line-height:1.6em;
+	font-weight: bold;
+}
+.rank03 {
+	margin:0px;
+	font-family:Helvetica, Arial, "Nimbus Sans L", sans-serif;
+	font-size:1.0em;
+	line-height:1.6em;
+	font-weight: bold;
+}
+
+/* FOOTER BASICS */
+.l-footer {	/* Margins in fancy.css */
+	padding-top: 5px; 
+	border-top: 3px solid #006699;
+}
+.w-footer {	/* Margins in fancy.css */
+	padding-top: 5px; 
+	border-top: 3px solid #006699;
+}
+.f-copyright {	/* Margins in fancy.css */
+	font-family:Helvetica, Arial, "Nimbus Sans L", sans-serif;
+	font-size: 0.875em;
+	text-align:center;
+	padding: 1px;
+}
+.footer-links {	/* More in fancy.css */
+	font-family: Helvetica, Arial, "Nimbus Sans L", sans-serif;
+	font-size: 0.875em;
+	text-align: center;
+	line-height:1.6em
+}
+.split m {
+	padding: 0em 1em;
+}
+
+/* Book reading stuff */
+.book {
+	margin: 0 0 20px 20px; 
+	padding: 2px 20px; 
+	border: 2px green solid;
+	font-family: Georgia, "URW Bookman L", serif;
+}
+.book h3 { color:green; }
+.book ul, .book ol { padding-left: 1.2em; }
+.book li { margin-bottom: 0.5em; }
+.disclosure {
+	font-family: Helvetica, Arial, "Nimbus Sans L", sans-serif;
+	font-size: 0.7em;
+	text-align: center;
+	line-height:1.0em
+}
+
+.bk1 {
+	color: #FF6600;
+	background: transparent;
+	font-family: Helvetica, Arial, "Nimbus Sans L", sans-serif; 
+	font-weight: bold;
+	font-size: 1.125em;
+}
+.bk2 {
+	color: #007EB9;
+	background: transparent;
+	font-family: Helvetica, Arial, "Nimbus Sans L", sans-serif; 
+	font-weight: bold;
+	font-size: 1.125em;
+}
+
+/* Boxes, breakouts */
+.caution {
+	margin: 20px 20% 20px 20px; 
+	padding: 2px 20px; 
+	border: 1px red dashed;
+}
+.commendblock { 
+	margin: 30px; 
+	padding: 10px 20px 10px 20px; 
+	border: 1px #006699 dashed; 
+}
+.commendblock blockquote {
+	margin: 1em 3em;
+	color: #666;
+	border-left: 2px solid #999;
+	padding-left: 1em;
+	font-style: italic;
+	font-family: Georgia, "URW Bookman L", serif; 
+}
+.commendblock h3 {
+	margin-top: 0;
+}
+.feedback {
+	margin-bottom: 2em;
+}
+.feedback blockquote {
+	margin: 1em 3em;
+	color: #666;
+	border-left: 2px solid #999;
+	padding-left: 1em;
+	font-style: italic;
+	font-family: Georgia, "URW Bookman L", serif; 
+	/*font-size: 0.875em; */
+}
+.feedback p {
+	border-bottom: 1px #999 dashed;
+	padding-bottom: 1em;
+	margin-bottom: 1em;
+}
+div.breakout {	/* margin-right in fancy */
+	margin: 10px;
+	padding: 10px;
+	border: 1px red dashed;
+}
+div.boxed {
+	border: 1px gray dashed;
+	padding: 10px;
+	margin: 10px;
+}
+.quote {
+	color: #cc0000;
+	background: transparent;
+	font-family: Georgia, "URW Bookman L", serif;
+	line-height: 1.5;
+}
+.withdrawn {
+	text-decoration:line-through;
+	color:gray;
+}
+
+.newthing {
+	color:yellow;
+	background: red;
+	font-weight: bold;
+}
+pre.console {
+	padding: 20px 10px 20px 10px;
+	background-color: #222;
+	overflow: auto;
+	/*font-size: 12px;*/
+	color: #fff;
+	font-family: Consolas,Calibri,monospace;
+}
+pre.hl	{ color:#000000; background-color:transparent; /*font-size:10pt;*/ font-family:"Courier New",Courier,"Nimbus Mono L",monospace;}
+.hl.num { color:#000000; }
+.hl.esc { color:#a31515; }
+.hl.str { color:#a31515; }
+.hl.pps { color:#0000ff; }
+.hl.slc { color:#008000; }
+.hl.com { color:#008000; }
+.hl.ppc { color:#0000ff; }
+.hl.opt { color:#000000; }
+.hl.lin { color:#2b91af; }
+.hl.kwa { color:#0000ff; }
+.hl.kwb { color:#0000ff; }
+.hl.kwc { color:#2b91af; }
+.hl.kwd { color:#000000; }

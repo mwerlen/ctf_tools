@@ -1,0 +1,47 @@
+div.comments {
+	width: 100%; 
+	margin-top: 10px; 
+	padding-top: 5px; 
+	border-top: 1px dashed gray;
+}
+
+div.comments blockquote {
+	font-size: 0.9em;
+	width:80%;
+	clear:both;
+	margin: 1em 10px;
+	margin-left: 50px;
+	padding: 0 0.5em 0.5em 0.5em;
+	border-top: 1px solid gray;
+	background: #efefef;
+}
+div.comments blockquote.reply {
+	background: #D8D8D8; 
+}
+
+div.comments blockquote p {
+	margin-top: 1em;
+}
+
+div.comments cite {
+	font-style: normal; 
+	display:block; 
+	border-top: 1px dotted gray;
+	padding-top: 0.2em;
+}
+
+div.comments blockquote pre {
+	background: white;
+	color: black;
+	margin: 10px; 
+	padding: 5px; 
+	border: thin dashed black;
+	overflow: auto;
+	width: 90%;
+}
+
+div.warn {
+	display:inline; 
+	color:red;
+	font-size:80%;
+}

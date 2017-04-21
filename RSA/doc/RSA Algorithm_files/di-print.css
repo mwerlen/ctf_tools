@@ -1,0 +1,18 @@
+body {
+	color : #000000;
+	background : white;
+	font-family : verdana, arial, helvetica, sans-serif;
+	font-size : 16px;
+}
+a {
+	text-decoration : underline;
+	color : #0000ff;
+	background : white;
+}
+#menu, #advertising, #search, #w3c, #other, #clustr, #index {
+  display : none;
+}
+
+h2, h3, h4 {
+   page-break-after: avoid;
+}
