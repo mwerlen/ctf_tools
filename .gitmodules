@@ -1,0 +1,3 @@
+[submodule "tools/libc-database"]
+	path = tools/libc-database
+	url = https://github.com/niklasb/libc-database.git
