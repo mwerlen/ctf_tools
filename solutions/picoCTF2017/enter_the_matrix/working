@@ -1,0 +1,30 @@
+0xf7fab000 -- global offset table
+
+0x804a180 -- Début de la liste des pointeurs de matrices
+0x804a980 -- Fin de la liste des pointeurs des matrices
+
+0x804b008 -- debut de l'objet matrice #1
+0x804b008 -- nb rows
+0x804b00c -- nb cols
+0x804b010 -- pointeur data
+x/25fw 0x804b018 -- Debut de la matrice 0
+
+0xffffcf4c -- buff (commande)
+
+
+
+Arch:     i386-32-little
+RELRO:    No RELRO
+Stack:    Canary found
+NX:       NX enabled
+PIE:      No PIE (0x8048000)
+
+
+Idée :
+- Créer une première matrice non carrée
+- Créer une seconde matrice (n'importe quelle taille)
+- En débordant de la première matrice, écraser la taille max en hauteur et largeur de la seconde matrice
+- avec la fonction get on peut lire n'importe quelle valeur en mémoire
+- avec la fonction set on peut écrire n'importe quelle valeur en mémoire
+- Ecraser la GOT/PLT pour free pour écrire execve
+- écrire dans les cases de la première matrice /bin/bash
