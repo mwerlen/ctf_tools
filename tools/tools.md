@@ -12,5 +12,6 @@ Libs
 ----
 
 * http://docs.pwntools.com/en/stable/globals.html
+* Bits manupilation with [bitstring](http://pythonhosted.org/bitstring/creation.html)
 
 
