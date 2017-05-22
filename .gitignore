@@ -1,1 +1,4 @@
 *.pyc
+.gdb_history
+.idea/
+core
